@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Enemy.gd" type="Script" id=2]
+[ext_resource path="res://assets/Enemy.png" type="Texture" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 1 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 54.3574, 43.1818 )
+
+[node name="Enemy" type="KinematicBody2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( -6.61139, -10.4071 )
+scale = Vector2( 0.147915, 0.147915 )
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 92.0147, 105.904, 334.563, 366.94 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = -82.3024
+margin_top = 25.9282
+margin_right = 80.6976
+margin_bottom = 61.9282
+custom_fonts/normal_font = SubResource( 1 )
+bbcode_enabled = true
+bbcode_text = "[center]Type this![/center]"
+text = "Type this!"
+fit_content_height = true
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.318848, 0.222076 )
+shape = SubResource( 2 )

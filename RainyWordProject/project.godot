@@ -16,7 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="RainyWord"
+run/main_scene="res://FirstPage.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Lobby="*res://Lobby.gd"
 
 [rendering]
 

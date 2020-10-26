@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://FirstPage.gd" type="Script" id=2]
+[ext_resource path="res://assets/background.jpg" type="Texture" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 25
+font_data = ExtResource( 1 )
+
+[node name="FirstPage" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -22.3496
+margin_top = -15.7622
+margin_right = 1049.65
+margin_bottom = 630.238
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="nameBox" type="TextEdit" parent="."]
+margin_left = 372.462
+margin_top = 159.599
+margin_right = 678.462
+margin_bottom = 208.599
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="connectButton" type="Button" parent="."]
+margin_left = 374.197
+margin_top = 243.165
+margin_right = 497.197
+margin_bottom = 292.165
+custom_fonts/font = SubResource( 1 )
+text = "Connect"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="disconnectButton" type="Button" parent="."]
+margin_left = 522.867
+margin_top = 241.905
+margin_right = 674.867
+margin_bottom = 290.905
+custom_fonts/font = SubResource( 1 )
+text = "Disconnect"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="connectButton" to="." method="_on_connectButton_pressed"]
+[connection signal="pressed" from="disconnectButton" to="." method="_on_disconnectButton_pressed"]
