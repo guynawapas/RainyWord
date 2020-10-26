@@ -6,8 +6,8 @@ const MAX_PLAYERS = 200
 const IP_ADDRESS = "127.0.0.1"
 var totalUserCount= ""
 onready var players = $Players
-
-
+onready var matching = $Matching
+onready var rooms = $Rooms
 
 func _ready():
 	var network = NetworkedMultiplayerENet.new()
@@ -15,7 +15,9 @@ func _ready():
 	get_tree().set_network_peer(network)
 	network.connect("peer_connected", self, "_peer_connected")
 	network.connect("peer_disconnected", self, "_peer_disconnected")
-	Lobby.players=players
+	Lobby.players = players
+	Lobby.matching = matching
+	Lobby.rooms = rooms
 	print("listening on port",PORT)
 	
 func _peer_connected(id):

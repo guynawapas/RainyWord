@@ -2,48 +2,55 @@ extends Node
 
 
 var player = preload("res://Player.tscn")
-var player_dict={}
-var players = null
-var in_match={}
-var rooms = null
-var matching = null
+#var player_dict= {}
+var players = null #Players node in server scene
+var in_match= {}
+var rooms = null #Rooms node in server scene
+var matching = null #Matching node in server scene
+
 
 
 func peer_connected(id):
 	print(self.get_path())
 	var new_player = player.instance()
 	new_player.set_id(id)
-	player_dict[id] = new_player
+	#player_dict[id] = new_player
 	players.add_child(new_player)
 	
 
 func peer_disconnected(id):
-	player_dict.erase(id)
+	#player_dict.erase(id)
 	for player in players.get_children():
 		if(player.id==id):
 			player.queue_free()
 			return
-	pass
+	for player in matching.get_children():
+		if(player.id==id):
+			player.queue_free()
+			return
+	for player in rooms.get_children():
+		if(player.id==id):
+			player.queue_free()
+			return
 	
 	
 remote func set_player_name(player_name):
-	print("called")
-	player_dict[get_tree().get_rpc_sender_id()].set_player_name(player_name)
+	print("setting player name: %s"%player_name)
+	var rpc_player_id = get_tree().get_rpc_sender_id()
+	var node_player = players.get_node(str(rpc_player_id))
+	node_player.set_player_name(player_name)
+	#player_dict[rpc_player_id].set_player_name(player_name)
 	
-remote func test():
-	print("test succeed")
+remote func find_match():
+	var rpc_player_id = get_tree().get_rpc_sender_id()
+	var node_player = players.get_node(str(rpc_player_id))
+	node_player.get_parent().remove_child(node_player)
+	matching.add_child(node_player)
 	
 	
 func do_match():#match first 2 player /// will need to be change
-	if(player_dict.size()==2):
-		var keys = player_dict.keys()
-		rpc_id(keys[0],"set_players_name",[player_dict[keys[0]].player_name,player_dict[keys[1]].player_name])
-		rpc_id(keys[1],"set_players_name",[player_dict[keys[1]].player_name,player_dict[keys[0]].player_name])
-		in_match[0]=player_dict[keys[0]]
-		in_match[1]=player_dict[keys[1]]
-		player_dict.erase(keys[0])
-		player_dict.erase(keys[1])
-		
+	
+	pass
 		
 func _process(delta):
 #	for player in players.get_children():

@@ -23,6 +23,7 @@ config/icon="res://icon.png"
 
 WordList="*res://WordList.gd"
 Global="*res://Global.gd"
+Lobby="*res://Lobby.gd"
 
 [input]
 
