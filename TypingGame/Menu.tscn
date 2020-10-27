@@ -1,8 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Menu.gd" type="Script" id=2]
 [ext_resource path="res://assets/background.jpg" type="Texture" id=3]
+
+[sub_resource type="DynamicFont" id=2]
+size = 34
+extra_spacing_top = 12
+font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=1]
 size = 23
@@ -18,6 +23,19 @@ margin_right = 1063.9
 margin_bottom = 657.449
 texture = ExtResource( 3 )
 expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="nameLabel" type="Label" parent="."]
+margin_left = 416.888
+margin_top = 30.0034
+margin_right = 600.888
+margin_bottom = 90.0034
+grow_horizontal = 2
+grow_vertical = 2
+custom_fonts/font = SubResource( 2 )
+text = "Welcome!"
 __meta__ = {
 "_edit_use_anchors_": false
 }

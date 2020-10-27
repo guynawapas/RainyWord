@@ -8,6 +8,8 @@ var totalUserCount= ""
 onready var players = $Players
 onready var matching = $Matching
 onready var rooms = $Rooms
+onready var playing = $Playing
+onready var singlePlayer = $SinglePlayer
 
 func _ready():
 	var network = NetworkedMultiplayerENet.new()
@@ -18,6 +20,8 @@ func _ready():
 	Lobby.players = players
 	Lobby.matching = matching
 	Lobby.rooms = rooms
+	Lobby.playing = playing
+	Lobby.singlePlayer = singlePlayer
 	print("listening on port",PORT)
 	
 func _peer_connected(id):
@@ -44,3 +48,13 @@ func listAllClient():
 	for player in players.get_children():
 		listOfClients+="\n\t"+str(player.id)
 	get_node("labelClientList").text = listOfClients
+
+
+func _on_Restart_pressed():#disconnect all clients
+	for player in players.get_children():
+		player.queue_free()	
+	for player in matching.get_children():
+		player.queue_free()	
+	for player in rooms.get_children():
+		player.queue_free()
+

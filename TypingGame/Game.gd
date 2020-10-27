@@ -6,24 +6,27 @@ onready var enemy_container = $EnemyContainer
 onready var spawn_container = $SpawnContainer
 onready var spawn_timer = $SpawnTimer
 onready var difficulty_value = $MatchInformation/VBoxContainer/TopRow/DiffucultyValue
+onready var player_Name_Label = $MatchInformation/VBoxContainer/Mid2Row/PlayerNameLabel
 onready var player_score_value = $MatchInformation/VBoxContainer/Mid2Row/PlayerScoreValue
+onready var enemy_Name_Label = $MatchInformation/VBoxContainer/BotRow/EnemyNameLabel
+onready var enemy_Score_Value = $MatchInformation/VBoxContainer/BotRow/EnemyScoreValue
 
 var current_letter_index=-1
-#reset every game
+
 var active_enemy =null
 var difficulty = 0
-var player_score = 0
-var opponent_score = 0
-var player_name = "Player"
-var enemy_name = "Enemy"
+
 
 
 #all timer will be implement on server
 func _ready():
-	print("ready")
-	randomize()
-	spawn_timer.start()
-	spawn_enemy()
+	if Lobby.is_singlePlayer:
+		print("single Player Game")
+		enemy_Name_Label.hide()
+		enemy_Score_Value.hide()
+	start_game()
+	
+	
 
 func find_new_active_enemy(typed_character:String):
 	for enemy in enemy_container.get_children():
@@ -67,8 +70,8 @@ func _unhandled_input(event:InputEvent)->void:
 
 #value will need to be sent to server
 func word_killed():
-	player_score += 1
-	player_score_value.text = str(player_score)
+	Lobby.player_gain_score()
+	player_score_value.text = str(Lobby.player_score)
 
 #probably will have to move to server
 func _on_SpawnTimer_timeout():
@@ -78,7 +81,7 @@ func _on_SpawnTimer_timeout():
 	
 	
 func spawn_enemy():
-	print("spawnEnemy")
+	#print("spawnEnemy")
 	var enemy_instance = Enemy.instance()
 	var spawns = spawn_container.get_children()
 	#index will need to be from server
@@ -91,7 +94,7 @@ func spawn_enemy():
 func _on_DifficultyTimer_timeout():
 	difficulty += 1
 	Global.emit_signal("difficulty_increased",difficulty)
-	print("difficulty increased to %d"%difficulty)
+	#print("difficulty increased to %d"%difficulty)
 	var new_wait_time = spawn_timer.wait_time - 0.2
 	spawn_timer.wait_time = clamp(new_wait_time,1,spawn_timer.wait_time)
 	#timer won't be faster than 1 second
@@ -104,7 +107,18 @@ func _on_DeathArea_body_entered(body):
 	game_over()
 	
 func game_over():
-	start_game()
+	pass
 	
 func start_game():
-	pass
+	randomize()
+	if Lobby.is_singlePlayer:
+		player_Name_Label.text = "Your Score: "
+	else:
+		player_Name_Label.text = Lobby.player_name + " (You): "
+		enemy_Name_Label.text = Lobby.opponent_name + ": "
+	spawn_timer.start()
+	spawn_enemy()
+	
+func _process(delta):
+	
+	enemy_Score_Value.text = str(Lobby.opponent_score)
