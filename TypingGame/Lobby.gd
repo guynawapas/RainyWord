@@ -43,6 +43,16 @@ func on_singlePlayer_pressed():
 #	Global.emit_signal("singlePlayer")
 	is_singlePlayer = true
 	
+func on_button_cancel_find_match_pressed():
+	rpc_id(1,"cancel_find_match")
+
+remote func opponent_disconnected():
+	opponent_name = ""
+	room_id = -1
+	soft_reset()
+	get_tree().change_scene("res://Menu.tscn")
+
+
 func player_gain_score():
 	self.player_score += 1
 	rpc_id(1,"player_gain_score",self.player_score,room_id)

@@ -30,15 +30,21 @@ func peer_disconnected(id):
 	for player in playing.get_children():
 		if(player.id==id):
 			print("player in room "+str(player.room_id)+" disconnected")
-			if rooms.get_node(str(player.room_id))!= null:
-				rooms.get_node(str(player.room_id)).queue_free()
+			var room_disconnected = rooms.get_node(str(player.room_id))
+			if room_disconnected != null:
+				for client_in_room in room_disconnected.connected_players:
+					if client_in_room.id != id:
+						rpc_id(client_in_room.id,"opponent_disconnected")
+					print(client_in_room.player_name)
+				room_disconnected.queue_free()
 			player.queue_free()
 			return
 	for player in singlePlayer.get_children():
 		if(player.id==id):
 			player.queue_free()
 			return
-	
+
+
 remote func set_player_name(player_name):
 	print("setting player name: %s"%player_name)
 	var rpc_player_id = get_tree().get_rpc_sender_id()
@@ -58,6 +64,11 @@ remote func find_match():
 	matching.add_child(node_player)
 	do_match(node_player)
 	
+remote func cancel_find_match():
+	var rpc_player_id = get_tree().get_rpc_sender_id()
+	var node_player = matching.get_node(str(rpc_player_id))
+	node_player.get_parent().remove_child(node_player)
+	players.add_child(node_player)
 	
 func do_match(node_player):
 	if matching.get_child_count() < 2:
@@ -108,7 +119,8 @@ remote func player_gain_score(score,room_id):
 	for player in player_room.connected_players:
 		if player.id != get_tree().get_rpc_sender_id():
 			rpc_id(player.id,"opponent_gain_score")
-
+		else:
+			player.player_score += 1
 
 
 

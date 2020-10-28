@@ -4,12 +4,12 @@
 [ext_resource path="res://FirstPage.gd" type="Script" id=2]
 [ext_resource path="res://assets/background.jpg" type="Texture" id=3]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 26
 extra_spacing_top = 8
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 25
 font_data = ExtResource( 1 )
 
@@ -32,7 +32,7 @@ margin_left = 372.462
 margin_top = 159.599
 margin_right = 678.462
 margin_bottom = 208.599
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 caret_blink = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -43,7 +43,7 @@ margin_left = 374.197
 margin_top = 243.165
 margin_right = 497.197
 margin_bottom = 292.165
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Connect"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -54,7 +54,7 @@ margin_left = 522.867
 margin_top = 241.905
 margin_right = 674.867
 margin_bottom = 290.905
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Disconnect"
 __meta__ = {
 "_edit_use_anchors_": false

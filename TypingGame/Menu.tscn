@@ -1,16 +1,24 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Menu.gd" type="Script" id=2]
 [ext_resource path="res://assets/background.jpg" type="Texture" id=3]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 size = 34
 extra_spacing_top = 12
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 23
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 39
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 34
 font_data = ExtResource( 1 )
 
 [node name="Menu" type="Node2D"]
@@ -34,7 +42,7 @@ margin_right = 600.888
 margin_bottom = 90.0034
 grow_horizontal = 2
 grow_vertical = 2
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 text = "Welcome!"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -45,7 +53,7 @@ margin_left = 36.3284
 margin_top = 302.888
 margin_right = 214.328
 margin_bottom = 348.888
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Find Match"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -56,10 +64,58 @@ margin_left = 36.3284
 margin_top = 373.309
 margin_right = 214.328
 margin_bottom = 419.309
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Single PLayer"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SearchingForPlayerScreen" type="PanelContainer" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/SearchingForPlayerScreen"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 593.0
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/SearchingForPlayerScreen"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1017.0
+margin_bottom = 593.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/SearchingForPlayerScreen/CenterContainer"]
+margin_left = 288.0
+margin_top = 257.0
+margin_right = 722.0
+margin_bottom = 329.0
+
+[node name="searchingText" type="Label" parent="CanvasLayer/SearchingForPlayerScreen/CenterContainer/VBoxContainer"]
+margin_right = 434.0
+margin_bottom = 33.0
+custom_fonts/font = SubResource( 3 )
+text = "Searching for player..."
+
+[node name="backButton" type="Button" parent="CanvasLayer/SearchingForPlayerScreen/CenterContainer/VBoxContainer"]
+anchor_top = 0.3
+anchor_bottom = 0.3
+margin_top = 37.0
+margin_right = 434.0
+margin_bottom = 72.0
+custom_fonts/font = SubResource( 4 )
+text = "Cancel"
 [connection signal="pressed" from="FindMatch" to="." method="_on_FindMatch_pressed"]
 [connection signal="pressed" from="SinglePlayer" to="." method="_on_SinglePlayer_pressed"]
+[connection signal="pressed" from="CanvasLayer/SearchingForPlayerScreen/CenterContainer/VBoxContainer/backButton" to="." method="_on_backButton_pressed"]
