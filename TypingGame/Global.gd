@@ -3,6 +3,8 @@ extends Node
 
 signal difficulty_increased(new_difficulty)
 
-signal set_opponent_name(opponent_name)
+signal opponent_conceded()
 
-signal singlePlayer()
+signal opponent_return_to_menu()
+
+signal spawn_enemy(word)

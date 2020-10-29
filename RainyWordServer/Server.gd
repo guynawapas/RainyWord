@@ -9,7 +9,8 @@ onready var players = $Players
 onready var matching = $Matching
 onready var rooms = $Rooms
 onready var playing = $Playing
-onready var singlePlayer = $SinglePlayer
+onready var single_player_room = $SinglePlayerRoom
+onready var single_player = $SinglePlayer
 
 func _ready():
 	var network = NetworkedMultiplayerENet.new()
@@ -21,7 +22,8 @@ func _ready():
 	Lobby.matching = matching
 	Lobby.rooms = rooms
 	Lobby.playing = playing
-	Lobby.singlePlayer = singlePlayer
+	Lobby.single_player_room = single_player_room
+	Lobby.single_player = single_player
 	print("listening on port",PORT)
 	
 func _peer_connected(id):

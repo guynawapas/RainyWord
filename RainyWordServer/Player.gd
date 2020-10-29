@@ -10,19 +10,20 @@ var player_score = 0
 
 
 func set_id(id):
-	self.id=id
-	self.name=str(id)
+	self.id = id
+	self.name = str(id)
 	
 func set_player_name(name):
-	print("set_player_name was called")
-	self.player_name=name
+	self.player_name = name
 	
-func timer_start():
-	get_node("MatchTimer").start()
+
 	
 func soft_reset():
-	get_node("MatchTimer").stop()
+	player_score = 0
 	
 func hard_reset():
 	soft_reset()
-	connected_player=null
+	connected_player = null
+	room_id = -1
+	wish_for_rematch = false
+	

@@ -6,8 +6,9 @@ var players = null #Players node in server scene
 var rooms = null #Rooms node in server scene
 var matching = null #Matching node in server scene
 var playing = null #Playing node in server scene
-var singlePlayer = null #SinglePlayer node in server scene
-var in_match = {}
+var single_player_room = null #SinglePlayerRoom node in server scene
+var single_player = null #SinglePlayer node in server scene
+
 var room_id = 0
 
 func peer_connected(id):
@@ -39,9 +40,10 @@ func peer_disconnected(id):
 				room_disconnected.queue_free()
 			player.queue_free()
 			return
-	for player in singlePlayer.get_children():
+	for player in single_player.get_children():
 		if(player.id==id):
 			player.queue_free()
+			single_player_room.get_node(str(player.room_id)).queue_free()
 			return
 
 
@@ -54,8 +56,13 @@ remote func set_player_name(player_name):
 remote func singlePlayer():
 	var rpc_player_id = get_tree().get_rpc_sender_id()
 	var node_player = players.get_node(str(rpc_player_id))
+	var new_room = room.instance()
+	new_room.set_id(room_id)
 	node_player.get_parent().remove_child(node_player)
-	singlePlayer.add_child(node_player)
+	single_player.add_child(node_player)
+	single_player_room.add_child(new_room)
+	new_room.connected_players = [node_player]
+	node_player.room_id = room_id
 	
 remote func find_match():
 	var rpc_player_id = get_tree().get_rpc_sender_id()
@@ -84,10 +91,10 @@ func do_match(node_player):
 		new_room.connected_players = [node_player,enemy_player]
 		node_player.room_id = room_id
 		enemy_player.room_id = room_id
+		node_player.connected_player = enemy_player
+		enemy_player.connected_player = node_player
 		rpc_id(node_player.id,"got_opponent",enemy_player.player_name,room_id)
 		rpc_id(enemy_player.id,"got_opponent",node_player.player_name,room_id)
-		node_player.timer_start()
-		enemy_player.timer_start()
 		room_id+=1
 	
 func random_opponent(node_player):#find opponent that is not self
@@ -112,8 +119,28 @@ func create_room():
 	new_room.set_id(room_id)
 	rooms.add_child(new_room)
 	return new_room
-	
-	
+
+#update time left in clients
+func match_time_tick(room_id,time_left):
+	if rooms.get_node(str(room_id)) == null:
+		for player in single_player_room.get_node(str(room_id)).connected_players:
+			rpc_id(player.id,"time_tick",time_left)
+	else:
+		for player in rooms.get_node(str(room_id)).connected_players:
+			rpc_id(player.id,"time_tick",time_left)
+
+func spawn_enemy(room_id,spawn_index):
+	var word = WordLists.get_word()
+	if rooms.get_node(str(room_id)) == null:
+		for player in single_player_room.get_node(str(room_id)).connected_players:
+			rpc_id(player.id,"spawn_enemy",word,spawn_index)
+	else:
+		for player in rooms.get_node(str(room_id)).connected_players:
+			rpc_id(player.id,"spawn_enemy",word,spawn_index)
+
+
+
+
 remote func player_gain_score(score,room_id):
 	var player_room = rooms.get_node(str(room_id))
 	for player in player_room.connected_players:
@@ -122,7 +149,39 @@ remote func player_gain_score(score,room_id):
 		else:
 			player.player_score += 1
 
+remote func player_conceded(is_singlePlayer):
+	var rpc_player_id = get_tree().get_rpc_sender_id()
+	if is_singlePlayer:
+		var node_player = single_player.get_node(str(rpc_player_id))
+		node_player.get_parent().remove_child(node_player)
+		players.add_child(node_player)
+		single_player_room.get_node(str(node_player.room_id)).queue_free()
+	else:
+		var node_player = playing.get_node(str(rpc_player_id))
+		var player_room = rooms.get_node(str(node_player.room_id))
+		for player in player_room.connected_players:
+			if player.id != rpc_player_id:
+				rpc_id(player.id,"opponent_conceded")
+				
 
+
+remote func player_return_to_menu():
+	var rpc_player_id = get_tree().get_rpc_sender_id()
+	var node_player = playing.get_node(str(rpc_player_id))
+	var connected_player = node_player.connected_player
+	
+	var player_room_id = node_player.room_id
+	
+	rooms.get_node(str(player_room_id)).queue_free()
+	#reset player states
+	node_player.hard_reset()
+	node_player.get_parent().remove_child(node_player)
+	players.add_child(node_player)
+	connected_player.hard_reset()
+	connected_player.get_parent().remove_child(connected_player)
+	players.add_child(connected_player)
+	rpc_id(connected_player.id,"opponent_return_to_menu")
+	
 
 remote func reset_game_room(caller_room_id):
 	var players_in_room = rooms.get_node(caller_room_id)

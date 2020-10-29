@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=2]
@@ -9,6 +9,34 @@ extents = Vector2( 511.747, 18.6757 )
 
 [sub_resource type="DynamicFont" id=2]
 size = 29
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 29
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 34
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 37
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 21
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 21
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 31
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 30
 font_data = ExtResource( 2 )
 
 [node name="Game" type="Node2D"]
@@ -53,7 +81,6 @@ position = Vector2( 888.16, 0.41098 )
 
 [node name="SpawnTimer" type="Timer" parent="."]
 wait_time = 3.0
-autostart = true
 
 [node name="DifficultyTimer" type="Timer" parent="."]
 autostart = true
@@ -63,76 +90,235 @@ autostart = true
 [node name="VBoxContainer" type="VBoxContainer" parent="MatchInformation"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 30.0
-margin_right = -734.0
-margin_bottom = -40.0
+margin_left = 17.0
+margin_top = 29.0
+margin_right = -717.0
+margin_bottom = -25.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TopRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+[node name="TimerRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_right = 290.0
 margin_bottom = 25.0
 
-[node name="DifficultyLabel" type="Label" parent="MatchInformation/VBoxContainer/TopRow"]
-margin_right = 163.0
+[node name="TimeLeft" type="Label" parent="MatchInformation/VBoxContainer/TimerRow"]
+margin_right = 81.0
 margin_bottom = 25.0
 custom_fonts/font = SubResource( 2 )
-text = "Difficulty : "
+text = "Time:"
 
-[node name="DiffucultyValue" type="Label" parent="MatchInformation/VBoxContainer/TopRow"]
-margin_left = 167.0
-margin_right = 187.0
+[node name="TimeValue" type="Label" parent="MatchInformation/VBoxContainer/TimerRow"]
+margin_left = 85.0
+margin_right = 145.0
 margin_bottom = 25.0
 custom_fonts/font = SubResource( 2 )
-text = "0"
+text = "500"
 
-[node name="MidRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+[node name="DifficultyRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_top = 29.0
 margin_right = 290.0
 margin_bottom = 54.0
 
-[node name="ScoreLabel" type="Label" parent="MatchInformation/VBoxContainer/MidRow"]
-margin_right = 92.0
+[node name="DifficultyLabel" type="Label" parent="MatchInformation/VBoxContainer/DifficultyRow"]
+margin_right = 157.0
 margin_bottom = 25.0
-custom_fonts/font = SubResource( 2 )
-text = "Score:"
+custom_fonts/font = SubResource( 3 )
+text = "Difficulty: "
 
-[node name="Mid2Row" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+[node name="DiffucultyValue" type="Label" parent="MatchInformation/VBoxContainer/DifficultyRow"]
+margin_left = 161.0
+margin_right = 181.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 3 )
+text = "0"
+
+[node name="ScoreRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_top = 58.0
 margin_right = 290.0
 margin_bottom = 83.0
 
-[node name="PlayerNameLabel" type="Label" parent="MatchInformation/VBoxContainer/Mid2Row"]
-margin_right = 69.0
+[node name="ScoreLabel" type="Label" parent="MatchInformation/VBoxContainer/ScoreRow"]
+margin_right = 92.0
 margin_bottom = 25.0
-custom_fonts/font = SubResource( 2 )
-text = "You: "
+custom_fonts/font = SubResource( 3 )
+text = "Score:"
 
-[node name="PlayerScoreValue" type="Label" parent="MatchInformation/VBoxContainer/Mid2Row"]
-margin_left = 73.0
-margin_right = 93.0
-margin_bottom = 25.0
-custom_fonts/font = SubResource( 2 )
-text = "0"
-
-[node name="BotRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+[node name="PlayerScoreRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_top = 87.0
 margin_right = 290.0
 margin_bottom = 112.0
 
-[node name="EnemyNameLabel" type="Label" parent="MatchInformation/VBoxContainer/BotRow"]
+[node name="PlayerNameLabel" type="Label" parent="MatchInformation/VBoxContainer/PlayerScoreRow"]
+margin_right = 69.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 3 )
+text = "You: "
+
+[node name="PlayerScoreValue" type="Label" parent="MatchInformation/VBoxContainer/PlayerScoreRow"]
+margin_left = 73.0
+margin_right = 93.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 3 )
+text = "0"
+
+[node name="EnemyScoreRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 116.0
+margin_right = 290.0
+margin_bottom = 141.0
+
+[node name="EnemyNameLabel" type="Label" parent="MatchInformation/VBoxContainer/EnemyScoreRow"]
 margin_right = 112.0
 margin_bottom = 25.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "Enemy: "
 
-[node name="EnemyScoreValue" type="Label" parent="MatchInformation/VBoxContainer/BotRow"]
+[node name="EnemyScoreValue" type="Label" parent="MatchInformation/VBoxContainer/EnemyScoreRow"]
 margin_left = 116.0
 margin_right = 136.0
 margin_bottom = 25.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "0"
+
+[node name="filler" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 145.0
+margin_right = 290.0
+margin_bottom = 507.0
+size_flags_vertical = 3
+
+[node name="ConcedeRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 511.0
+margin_right = 290.0
+margin_bottom = 546.0
+
+[node name="concedeButton" type="Button" parent="MatchInformation/VBoxContainer/ConcedeRow"]
+margin_right = 153.0
+margin_bottom = 35.0
+custom_fonts/font = SubResource( 4 )
+text = "Concede"
+
+[node name="gameOverScreen" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="gameOverScreen"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -7.0
+margin_top = -5.0
+margin_right = 8.0
+margin_bottom = 11.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="gameOverScreen/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1032.0
+margin_bottom = 609.0
+mouse_filter = 0
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="gameOverScreen/PanelContainer"]
+margin_left = 7.0
+margin_top = 278.0
+margin_right = 1032.0
+margin_bottom = 338.0
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="gameOverScreen/PanelContainer/VBoxContainer"]
+margin_right = 1025.0
+margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WinLoseStatus" type="Label" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer"]
+margin_left = 419.0
+margin_right = 606.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 5 )
+text = "You lose..."
+
+[node name="CenterContainer2" type="CenterContainer" parent="gameOverScreen/PanelContainer/VBoxContainer"]
+margin_top = 36.0
+margin_right = 1025.0
+margin_bottom = 60.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2"]
+margin_left = 424.0
+margin_right = 601.0
+margin_bottom = 24.0
+
+[node name="MainMenu" type="Button" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer"]
+margin_right = 68.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 6 )
+text = "Menu"
+
+[node name="Rematch" type="Button" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer"]
+margin_left = 72.0
+margin_right = 177.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 7 )
+text = "Rematch"
+
+[node name="OpponentLeftScreen" type="CanvasLayer" parent="."]
+
+[node name="opponentLeftScreen" type="PanelContainer" parent="OpponentLeftScreen"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -7.0
+margin_top = -7.0
+margin_right = 12.0
+margin_bottom = 9.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="OpponentLeftScreen/opponentLeftScreen"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1036.0
+margin_bottom = 609.0
+texture = ExtResource( 3 )
+expand = true
+
+[node name="CenterContainer" type="CenterContainer" parent="OpponentLeftScreen/opponentLeftScreen"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1036.0
+margin_bottom = 609.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OpponentLeftScreen/opponentLeftScreen/CenterContainer"]
+margin_left = 381.0
+margin_top = 269.0
+margin_right = 647.0
+margin_bottom = 332.0
+
+[node name="opponentLeftLabel" type="Label" parent="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer"]
+margin_right = 266.0
+margin_bottom = 27.0
+custom_fonts/font = SubResource( 8 )
+text = "Opponent Left . . ."
+
+[node name="opponentLeftOkButton" type="Button" parent="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer"]
+margin_top = 31.0
+margin_right = 266.0
+margin_bottom = 63.0
+custom_fonts/font = SubResource( 9 )
+text = "Ok"
 [connection signal="body_entered" from="DeathArea" to="." method="_on_DeathArea_body_entered"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_DifficultyTimer_timeout"]
+[connection signal="pressed" from="MatchInformation/VBoxContainer/ConcedeRow/concedeButton" to="." method="_on_concedeButton_pressed"]
+[connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/MainMenu" to="." method="_on_MainMenu_pressed"]
+[connection signal="pressed" from="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer/opponentLeftOkButton" to="." method="_on_opponentLeftOkButton_pressed"]

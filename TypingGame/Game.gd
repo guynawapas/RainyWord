@@ -5,11 +5,16 @@ var Enemy = preload("res://Enemy.tscn")
 onready var enemy_container = $EnemyContainer
 onready var spawn_container = $SpawnContainer
 onready var spawn_timer = $SpawnTimer
-onready var difficulty_value = $MatchInformation/VBoxContainer/TopRow/DiffucultyValue
-onready var player_Name_Label = $MatchInformation/VBoxContainer/Mid2Row/PlayerNameLabel
-onready var player_score_value = $MatchInformation/VBoxContainer/Mid2Row/PlayerScoreValue
-onready var enemy_Name_Label = $MatchInformation/VBoxContainer/BotRow/EnemyNameLabel
-onready var enemy_Score_Value = $MatchInformation/VBoxContainer/BotRow/EnemyScoreValue
+onready var difficulty_value = $MatchInformation/VBoxContainer/DifficultyRow/DiffucultyValue
+onready var player_Name_Label = $MatchInformation/VBoxContainer/PlayerScoreRow/PlayerNameLabel
+onready var player_score_value = $MatchInformation/VBoxContainer/PlayerScoreRow/PlayerScoreValue
+onready var enemy_Name_Label = $MatchInformation/VBoxContainer/EnemyScoreRow/EnemyNameLabel
+onready var enemy_Score_Value = $MatchInformation/VBoxContainer/EnemyScoreRow/EnemyScoreValue
+onready var game_over_screen = $gameOverScreen/PanelContainer
+onready var win_lose_status = $gameOverScreen/PanelContainer/VBoxContainer/CenterContainer/WinLoseStatus
+onready var opponent_left_screen = $OpponentLeftScreen/opponentLeftScreen
+onready var time_value = $MatchInformation/VBoxContainer/TimerRow/TimeValue
+
 
 var current_letter_index=-1
 
@@ -20,6 +25,9 @@ var difficulty = 0
 
 #all timer will be implement on server
 func _ready():
+	Global.connect("opponent_conceded",self,"handle_opponent_conceded")
+	Global.connect("opponent_return_to_menu",self,"handle_opponent_return_to_menu")
+	Global.connect("spawn_enemy",self,"handle_spawn_enemy")
 	if Lobby.is_singlePlayer:
 		print("single Player Game")
 		enemy_Name_Label.hide()
@@ -106,19 +114,68 @@ func _on_DeathArea_body_entered(body):
 	
 	game_over()
 	
+func _on_concedeButton_pressed(): #timer in server should also stop
+	win_lose_status.text = "Conceded..."
+	game_over_screen.show()
+	Lobby.on_concedeButton_pressed()
+	remove_all_enemy()
+	
+func handle_opponent_conceded():#probably will change name to game_end
+	win_lose_status.text = Lobby.win_lose_status
+	game_over_screen.show()
+	remove_all_enemy()
+	
+func handle_spawn_enemy(word,spawn_index):
+	var enemy_instance = Enemy.instance()
+	#print(enemy_instance.prompt_text)
+	var spawns = spawn_container.get_children()
+	enemy_instance.position = spawns[spawn_index].global_position
+	enemy_container.add_child(enemy_instance)
+	enemy_instance.set_word(word)
+	enemy_instance.set_difficulty(difficulty)
+	print("enemy word: %s"%word)
+	
+func _on_MainMenu_pressed():
+	if Lobby.opponent_just_left:
+		get_tree().change_scene("res://Menu.tscn")
+		Global.emit_signal("opponent_return_to_menu")
+		print("emitted")
+	else:
+		Lobby.on_main_menu_pressed()
+	
+func handle_opponent_return_to_menu():
+	opponent_left_screen.show()
+	
+
+func _on_opponentLeftOkButton_pressed():
+	get_tree().change_scene("res://Menu.tscn")
+	
+	
+func remove_all_enemy():
+	spawn_timer.stop()
+	for enemy in enemy_container.get_children():
+		enemy.queue_free()
+	
 func game_over():
 	pass
 	
 func start_game():
+	game_over_screen.hide()
+	opponent_left_screen.hide()
 	randomize()
 	if Lobby.is_singlePlayer:
 		player_Name_Label.text = "Your Score: "
 	else:
 		player_Name_Label.text = Lobby.player_name + " (You): "
 		enemy_Name_Label.text = Lobby.opponent_name + ": "
-	spawn_timer.start()
-	spawn_enemy()
+	#spawn_timer.start()
+	time_value.text = "500"
+	#spawn_enemy()
 	
 func _process(delta):
-	
+	time_value.text = str(Lobby.time_left)
 	enemy_Score_Value.text = str(Lobby.opponent_score)
+
+
+
+

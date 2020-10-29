@@ -21,7 +21,7 @@ texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 92.0147, 105.904, 334.563, 366.94 )
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
+[node name="word" type="RichTextLabel" parent="."]
 margin_left = -82.3024
 margin_top = 25.9282
 margin_right = 80.6976

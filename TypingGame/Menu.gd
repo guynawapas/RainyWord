@@ -16,8 +16,6 @@ func _on_FindMatch_pressed():
 	finding_match = true
 	searchingScreen.show()
 
-
-
 func _on_SinglePlayer_pressed():
 	Lobby.on_singlePlayer_pressed()
 	get_tree().change_scene("res://Game.tscn")
@@ -27,3 +25,10 @@ func _on_backButton_pressed():
 	searchingScreen.hide()
 	Lobby.on_button_cancel_find_match_pressed()
 	finding_match = false
+
+
+	
+	
+
+
+
