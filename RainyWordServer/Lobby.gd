@@ -56,11 +56,10 @@ remote func set_player_name(player_name):
 remote func singlePlayer():
 	var rpc_player_id = get_tree().get_rpc_sender_id()
 	var node_player = players.get_node(str(rpc_player_id))
-	var new_room = room.instance()
-	new_room.set_id(room_id)
+	var new_room = create_room(single_player_room)
+	new_room.is_single_player = true
 	node_player.get_parent().remove_child(node_player)
 	single_player.add_child(node_player)
-	single_player_room.add_child(new_room)
 	new_room.connected_players = [node_player]
 	node_player.room_id = room_id
 	
@@ -87,7 +86,7 @@ func do_match(node_player):
 		print("Opponent found " + str(enemy_player.id))
 		print("moving players in to room...")
 		move_to_playing(node_player,enemy_player)
-		var new_room = create_room()
+		var new_room = create_room(rooms)
 		new_room.connected_players = [node_player,enemy_player]
 		node_player.room_id = room_id
 		enemy_player.room_id = room_id
@@ -114,24 +113,24 @@ func move_to_playing(node1,node2):
 	node2.get_parent().remove_child(node2)
 	playing.add_child(node2)
 	
-func create_room():
+func create_room(rooms):
 	var new_room = room.instance()
 	new_room.set_id(room_id)
 	rooms.add_child(new_room)
 	return new_room
 
 #update time left in clients
-func match_time_tick(room_id,time_left):
-	if rooms.get_node(str(room_id)) == null:
+func match_time_tick(room_id,is_single_player,time_left):
+	if is_single_player:
 		for player in single_player_room.get_node(str(room_id)).connected_players:
 			rpc_id(player.id,"time_tick",time_left)
 	else:
 		for player in rooms.get_node(str(room_id)).connected_players:
 			rpc_id(player.id,"time_tick",time_left)
 
-func spawn_enemy(room_id,spawn_index):
+func spawn_enemy(room_id,is_single_player,spawn_index):
 	var word = WordLists.get_word()
-	if rooms.get_node(str(room_id)) == null:
+	if is_single_player:
 		for player in single_player_room.get_node(str(room_id)).connected_players:
 			rpc_id(player.id,"spawn_enemy",word,spawn_index)
 	else:
@@ -156,6 +155,7 @@ remote func player_conceded(is_singlePlayer):
 		node_player.get_parent().remove_child(node_player)
 		players.add_child(node_player)
 		single_player_room.get_node(str(node_player.room_id)).queue_free()
+		node_player.hard_reset()
 	else:
 		var node_player = playing.get_node(str(rpc_player_id))
 		var player_room = rooms.get_node(str(node_player.room_id))

@@ -127,13 +127,12 @@ func handle_opponent_conceded():#probably will change name to game_end
 	
 func handle_spawn_enemy(word,spawn_index):
 	var enemy_instance = Enemy.instance()
-	#print(enemy_instance.prompt_text)
 	var spawns = spawn_container.get_children()
 	enemy_instance.position = spawns[spawn_index].global_position
 	enemy_container.add_child(enemy_instance)
 	enemy_instance.set_word(word)
 	enemy_instance.set_difficulty(difficulty)
-	print("enemy word: %s"%word)
+	print("enemy word: %s at index %d"%[word,spawn_index])
 	
 func _on_MainMenu_pressed():
 	if Lobby.opponent_just_left:
