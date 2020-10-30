@@ -18,8 +18,8 @@ func _physics_process(delta):
 #text will be handle on server
 func _ready():
 	
-	prompt_text = WordList.get_word()
-	prompt.parse_bbcode("[center]" + prompt_text + "[/center]")
+#	prompt_text = WordList.get_word()
+#	prompt.parse_bbcode("[center]" + prompt_text + "[/center]")
 	Global.connect("difficulty_increased",self,"handle_difficulty_increased")
 	
 func set_word(word):

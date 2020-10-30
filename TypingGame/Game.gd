@@ -25,7 +25,7 @@ var difficulty = 0
 
 #all timer will be implement on server
 func _ready():
-	Global.connect("opponent_conceded",self,"handle_opponent_conceded")
+	Global.connect("game_end",self,"handle_game_end")
 	Global.connect("opponent_return_to_menu",self,"handle_opponent_return_to_menu")
 	Global.connect("spawn_enemy",self,"handle_spawn_enemy")
 	if Lobby.is_singlePlayer:
@@ -82,21 +82,21 @@ func word_killed():
 	player_score_value.text = str(Lobby.player_score)
 
 #probably will have to move to server
-func _on_SpawnTimer_timeout():
-	spawn_enemy()
-	
+#func _on_SpawnTimer_timeout():
+#	spawn_enemy()
+#
 
 	
 	
-func spawn_enemy():
-	#print("spawnEnemy")
-	var enemy_instance = Enemy.instance()
-	var spawns = spawn_container.get_children()
-	#index will need to be from server
-	var index = randi()%spawns.size()
-	enemy_instance.position = spawns[index].global_position
-	enemy_container.add_child(enemy_instance)
-	enemy_instance.set_difficulty(difficulty)
+#func spawn_enemy():
+#	#print("spawnEnemy")
+#	var enemy_instance = Enemy.instance()
+#	var spawns = spawn_container.get_children()
+#	#index will need to be from server
+#	var index = randi()%spawns.size()
+#	enemy_instance.position = spawns[index].global_position
+#	enemy_container.add_child(enemy_instance)
+#	enemy_instance.set_difficulty(difficulty)
 
 #will be implement on server
 func _on_DifficultyTimer_timeout():
@@ -111,7 +111,6 @@ func _on_DifficultyTimer_timeout():
 
 func _on_DeathArea_body_entered(body):
 	body.queue_free()
-	
 	game_over()
 	
 func _on_concedeButton_pressed(): #timer in server should also stop
@@ -120,7 +119,7 @@ func _on_concedeButton_pressed(): #timer in server should also stop
 	Lobby.on_concedeButton_pressed()
 	remove_all_enemy()
 	
-func handle_opponent_conceded():#probably will change name to game_end
+func handle_game_end():
 	win_lose_status.text = Lobby.win_lose_status
 	game_over_screen.show()
 	remove_all_enemy()
@@ -156,7 +155,8 @@ func remove_all_enemy():
 		enemy.queue_free()
 	
 func game_over():
-	pass
+	Lobby.game_end_hit_bottom()
+	
 	
 func start_game():
 	game_over_screen.hide()
@@ -168,7 +168,7 @@ func start_game():
 		player_Name_Label.text = Lobby.player_name + " (You): "
 		enemy_Name_Label.text = Lobby.opponent_name + ": "
 	#spawn_timer.start()
-	time_value.text = "500"
+	time_value.text = "300"
 	#spawn_enemy()
 	
 func _process(delta):

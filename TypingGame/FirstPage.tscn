@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://FirstPage.gd" type="Script" id=2]
 [ext_resource path="res://assets/background.jpg" type="Texture" id=3]
+[ext_resource path="res://assets/steam_AboutBanner.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 26
@@ -23,6 +24,19 @@ margin_right = 1049.65
 margin_bottom = 630.238
 texture = ExtResource( 3 )
 expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+modulate = Color( 0.878431, 0.878431, 0.878431, 1 )
+margin_left = 205.778
+margin_top = 244.183
+margin_right = 852.778
+margin_bottom = 634.183
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -3,7 +3,7 @@ extends Node
 
 signal difficulty_increased(new_difficulty)
 
-signal opponent_conceded()
+signal game_end()
 
 signal opponent_return_to_menu()
 

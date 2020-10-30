@@ -62,6 +62,9 @@ remote func singlePlayer():
 	single_player.add_child(node_player)
 	new_room.connected_players = [node_player]
 	node_player.room_id = room_id
+	rpc_id(rpc_player_id,"update_room_id",room_id)
+	spawn_enemy(room_id,true,1)
+	room_id += 1
 	
 remote func find_match():
 	var rpc_player_id = get_tree().get_rpc_sender_id()
@@ -139,14 +142,46 @@ func spawn_enemy(room_id,is_single_player,spawn_index):
 
 
 
-
-remote func player_gain_score(score,room_id):
-	var player_room = rooms.get_node(str(room_id))
-	for player in player_room.connected_players:
-		if player.id != get_tree().get_rpc_sender_id():
-			rpc_id(player.id,"opponent_gain_score")
-		else:
-			player.player_score += 1
+#time runs out or word hit bottom of screen
+remote func match_over(room_id,is_single_player):
+	var called_room
+	if is_single_player:
+		called_room = single_player_room.get_node(str(room_id))
+		called_room.stop_all_timers()
+		var node_player = called_room.connected_players[0]
+		rpc_id(node_player.id,"game_end","Your score is %d !"%node_player.player_score)
+		node_player.soft_reset()
+	else:
+		called_room = rooms.get_node(str(room_id))
+		var text = check_winner(called_room)
+		for node_player in called_room.connected_players:
+			rpc_id(node_player.id,"game_end",text)
+			node_player.soft_reset()
+		
+func check_winner(room):
+	var player1 = room.connected_players[0]
+	var player2 = room.connected_players[1]
+	var text = ""
+	if player1.player_score > player2.player_score:
+		text = player1.player_name + " wins!"
+	elif player2.player_score > player1.player_score:
+		text = player2.player_name + " wins!"
+	else:
+		text = "It's a tie!"
+	return text
+	
+	
+remote func player_gain_score(room_id,score,is_single_player):
+	if is_single_player:
+		var node_player = single_player.get_node(str(get_tree().get_rpc_sender_id()))
+		node_player.player_score += 1
+	else:
+		var player_room = rooms.get_node(str(room_id))
+		for player in player_room.connected_players:
+			if player.id != get_tree().get_rpc_sender_id():
+				rpc_id(player.id,"opponent_gain_score")
+			else:
+				player.player_score += 1
 
 remote func player_conceded(is_singlePlayer):
 	var rpc_player_id = get_tree().get_rpc_sender_id()
@@ -161,9 +196,17 @@ remote func player_conceded(is_singlePlayer):
 		var player_room = rooms.get_node(str(node_player.room_id))
 		for player in player_room.connected_players:
 			if player.id != rpc_player_id:
-				rpc_id(player.id,"opponent_conceded")
+				var text = node_player.connected_player.player_name + " conceded!"
+				rpc_id(player.id,"game_end",text)
+				print("send game end to %s"%player.player_name)
 				
-
+remote func single_player_return_to_menu():
+	var rpc_player_id = get_tree().get_rpc_sender_id()
+	var node_player = single_player.get_node(str(rpc_player_id))
+	node_player.get_parent().remove_child(node_player)
+	players.add_child(node_player)
+	single_player_room.get_node(str(node_player.room_id)).queue_free()
+	node_player.hard_reset()
 
 remote func player_return_to_menu():
 	var rpc_player_id = get_tree().get_rpc_sender_id()

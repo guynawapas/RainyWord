@@ -12,7 +12,7 @@ var opponent_score = 0
 var room_id  = -1
 var win_lose_status = ""
 var opponent_just_left = false
-var time_left = 500
+var time_left = 300
 
 func set_player_name(name):
 	self.player_name = name
@@ -55,6 +55,7 @@ func on_concedeButton_pressed():
 func on_main_menu_pressed():
 	if is_singlePlayer:
 		is_singlePlayer = false
+		rpc_id(1,"single_player_return_to_menu")
 	else:
 		rpc_id(1,"player_return_to_menu")
 	get_tree().change_scene("res://Menu.tscn")
@@ -75,9 +76,10 @@ remote func got_opponent(opponent_name,room_id):
 	print("got opponent",opponent_name)
 	get_tree().change_scene("res://Game.tscn")
 	
-remote func opponent_conceded():
-	win_lose_status = "%s conceded"%opponent_name
-	Global.emit_signal("opponent_conceded")
+remote func game_end(status):
+	print("received game end")
+	win_lose_status = status
+	Global.emit_signal("game_end")
 
 remote func opponent_return_to_menu():
 	opponent_just_left = true
@@ -89,8 +91,9 @@ remote func opponent_return_to_menu():
 func player_gain_score():
 	self.player_score += 1
 	if is_singlePlayer:
-		return
-	rpc_id(1,"player_gain_score",self.player_score,room_id)
+		rpc_id(1,"player_gain_score",room_id,self.player_score,true)
+	else:
+		rpc_id(1,"player_gain_score",room_id,self.player_score,false)
 	
 remote func opponent_gain_score():
 	print(opponent_name + "gained score!")
@@ -100,9 +103,14 @@ remote func time_tick(time_left):
 	self.time_left = time_left
 
 remote func spawn_enemy(word,spawn_index):
-	print("receive func from server")
 	Global.emit_signal("spawn_enemy",word,spawn_index)
+	
+func game_end_hit_bottom():
+	rpc_id(1,"match_over",room_id,is_singlePlayer)
 #--------------------------------------------------------------------
+remote func update_room_id(room_id):
+	self.room_id = room_id
+
 remote func soft_reset():
 	player_score = 0
 	opponent_score = 0

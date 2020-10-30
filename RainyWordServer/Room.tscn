@@ -9,7 +9,7 @@ script = ExtResource( 1 )
 autostart = true
 
 [node name="SpawnTimer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 2.0
 autostart = true
 
 [node name="DifficultyTimer" type="Timer" parent="."]
