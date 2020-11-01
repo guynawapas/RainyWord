@@ -77,6 +77,7 @@ remote func got_opponent(opponent_name,room_id):
 	get_tree().change_scene("res://Game.tscn")
 	
 remote func game_end(status):
+	soft_reset()
 	print("received game end")
 	win_lose_status = status
 	Global.emit_signal("game_end")
@@ -106,6 +107,7 @@ remote func spawn_enemy(word,spawn_index):
 	Global.emit_signal("spawn_enemy",word,spawn_index)
 	
 func game_end_hit_bottom():
+	soft_reset()
 	rpc_id(1,"match_over",room_id,is_singlePlayer)
 #--------------------------------------------------------------------
 remote func update_room_id(room_id):
@@ -114,11 +116,11 @@ remote func update_room_id(room_id):
 remote func soft_reset():
 	player_score = 0
 	opponent_score = 0
-	time_left = 500
+	time_left = 300
 
 remote func hard_reset():
 	opponent_name= ""
 	is_singlePlayer = false
 	player_score = 0
 	opponent_score = 0
-	time_left = 500
+	time_left = 300

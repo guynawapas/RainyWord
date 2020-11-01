@@ -154,11 +154,13 @@ remote func match_over(room_id,is_single_player):
 	else:
 		called_room = rooms.get_node(str(room_id))
 		var text = check_winner(called_room)
+		called_room.stop_all_timers()
 		for node_player in called_room.connected_players:
 			rpc_id(node_player.id,"game_end",text)
 			node_player.soft_reset()
 		
 func check_winner(room):
+	print("checking winner")
 	var player1 = room.connected_players[0]
 	var player2 = room.connected_players[1]
 	var text = ""

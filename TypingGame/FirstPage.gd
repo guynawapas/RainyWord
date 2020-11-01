@@ -7,9 +7,9 @@ extends Node
 #######################################################################################
 
 
-const PORT = 4242
-const IP_ADDRESS = "127.0.0.1"
-var player_name=""
+#const PORT = 4242
+#const IP_ADDRESS = "127.0.0.1"
+#var player_name=""
 
 
 func _process(delta):
