@@ -2,7 +2,7 @@ extends Node
 
 
 const PORT = 4242
-const IP_ADDRESS = "127.0.0.1"
+const IP_ADDRESS = "192.168.1.40"
 
 var player_name= ""
 var opponent_name= ""
@@ -117,6 +117,7 @@ remote func soft_reset():
 	player_score = 0
 	opponent_score = 0
 	time_left = 300
+	opponent_just_left = false
 
 remote func hard_reset():
 	opponent_name= ""
@@ -124,3 +125,4 @@ remote func hard_reset():
 	player_score = 0
 	opponent_score = 0
 	time_left = 300
+	opponent_just_left = false

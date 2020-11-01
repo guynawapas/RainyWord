@@ -196,6 +196,7 @@ remote func player_conceded(is_singlePlayer):
 	else:
 		var node_player = playing.get_node(str(rpc_player_id))
 		var player_room = rooms.get_node(str(node_player.room_id))
+		player_room.stop_all_timers()
 		for player in player_room.connected_players:
 			if player.id != rpc_player_id:
 				var text = node_player.connected_player.player_name + " conceded!"
