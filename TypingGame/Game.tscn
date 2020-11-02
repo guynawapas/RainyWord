@@ -321,4 +321,5 @@ text = "Ok"
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_DifficultyTimer_timeout"]
 [connection signal="pressed" from="MatchInformation/VBoxContainer/ConcedeRow/concedeButton" to="." method="_on_concedeButton_pressed"]
 [connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/MainMenu" to="." method="_on_MainMenu_pressed"]
+[connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/Rematch" to="." method="_on_Rematch_pressed"]
 [connection signal="pressed" from="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer/opponentLeftOkButton" to="." method="_on_opponentLeftOkButton_pressed"]

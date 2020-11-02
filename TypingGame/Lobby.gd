@@ -126,6 +126,17 @@ func deduct_score_hit_bottom():
 remote func update_room_id(room_id):
 	self.room_id = room_id
 
+func rematch():
+	soft_reset()
+	get_tree().change_scene("res://Game.tscn")
+	rpc_id(1,"rematch_server",room_id)
+	rpc_id(1,"tell_opponent_rematch",room_id)
+
+remote func rematch_opponent():
+	soft_reset()
+	get_tree().change_scene("res://Game.tscn")
+	rpc_id(1,"rematch_server",room_id)
+
 remote func soft_reset():
 	player_score = 0
 	opponent_score = 0

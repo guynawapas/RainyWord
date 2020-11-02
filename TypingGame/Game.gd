@@ -14,7 +14,7 @@ onready var game_over_screen = $gameOverScreen/PanelContainer
 onready var win_lose_status = $gameOverScreen/PanelContainer/VBoxContainer/CenterContainer/WinLoseStatus
 onready var opponent_left_screen = $OpponentLeftScreen/opponentLeftScreen
 onready var time_value = $MatchInformation/VBoxContainer/TimerRow/TimeValue
-
+onready var rematch_button = $gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/Rematch
 
 var current_letter_index=-1
 
@@ -32,6 +32,7 @@ func _ready():
 		print("single Player Game")
 		enemy_Name_Label.hide()
 		enemy_Score_Value.hide()
+		rematch_button.hide()
 	start_game()
 	
 	
@@ -161,7 +162,8 @@ func remove_all_enemy():
 	for enemy in enemy_container.get_children():
 		enemy.queue_free()
 
-	
+func _on_Rematch_pressed():
+	Lobby.rematch()
 	
 func start_game():
 	game_over_screen.hide()

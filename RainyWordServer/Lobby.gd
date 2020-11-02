@@ -246,6 +246,22 @@ remote func player_return_to_menu():
 	rpc_id(connected_player.id,"opponent_return_to_menu")
 	
 
+remote func rematch_server(room_id):
+	print("dfghtfhjyj")
+	var called_room = rooms.get_node(str(room_id))
+	called_room.match_timer.start()
+	called_room.diff_timer.start()
+	called_room.spawn_timer.start()
+	called_room.time_left=50
+	
+remote func tell_opponent_rematch(room_id):
+	var player_room = rooms.get_node(str(room_id))
+	for player in player_room.connected_players:
+		if player.id != get_tree().get_rpc_sender_id():
+				rpc_id(player.id,"rematch_opponent")
+
+
+
 remote func reset_game_room(caller_room_id):
 	var players_in_room = rooms.get_node(caller_room_id)
 	for player in players:
