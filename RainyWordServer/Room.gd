@@ -2,7 +2,7 @@ extends Node
 
 var id =- 1
 var connected_players = []
-var time_left = 10
+var time_left = 50
 var is_single_player = false
 onready var match_timer = $MatchTimer
 onready var diff_timer = $DifficultyTimer
@@ -16,7 +16,7 @@ func set_id(id):
 	self.id = id
 	self.name = str(id)
 
-	
+
 
 
 func _on_MatchTimer_timeout():

@@ -184,6 +184,23 @@ remote func player_gain_score(room_id,score,is_single_player):
 				rpc_id(player.id,"opponent_gain_score")
 			else:
 				player.player_score += 1
+				
+remote func deduct_score(room_id,score,is_single_player):
+	if is_single_player:
+		var node_player = single_player.get_node(str(get_tree().get_rpc_sender_id()))
+		node_player.player_score -= 1
+		if node_player.player_score < 0:
+			node_player.player_score = 0
+	else:
+		var player_room = rooms.get_node(str(room_id))
+		for player in player_room.connected_players:
+			if player.id != get_tree().get_rpc_sender_id():
+				rpc_id(player.id,"opponent_lose_score")
+			else:
+				player.player_score -= 1
+				if player.player_score < 0:
+					player.player_score = 0
+	
 
 remote func player_conceded(is_singlePlayer):
 	var rpc_player_id = get_tree().get_rpc_sender_id()

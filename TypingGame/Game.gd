@@ -81,6 +81,13 @@ func word_killed():
 	Lobby.player_gain_score()
 	player_score_value.text = str(Lobby.player_score)
 
+
+	
+func deduct_score():
+	Lobby.deduct_score_hit_bottom()
+	player_score_value.text = str(Lobby.player_score)
+	
+	
 #probably will have to move to server
 #func _on_SpawnTimer_timeout():
 #	spawn_enemy()
@@ -111,7 +118,7 @@ func _on_DifficultyTimer_timeout():
 
 func _on_DeathArea_body_entered(body):
 	body.queue_free()
-	game_over()
+	deduct_score()
 	
 func _on_concedeButton_pressed(): #timer in server should also stop
 	win_lose_status.text = "Conceded..."
@@ -153,9 +160,7 @@ func remove_all_enemy():
 	spawn_timer.stop()
 	for enemy in enemy_container.get_children():
 		enemy.queue_free()
-	
-func game_over():
-	Lobby.game_end_hit_bottom()
+
 	
 	
 func start_game():

@@ -2,7 +2,7 @@ extends Node
 
 
 const PORT = 4242
-const IP_ADDRESS = "192.168.1.40"
+const IP_ADDRESS = "127.0.0.1"
 
 var player_name= ""
 var opponent_name= ""
@@ -95,7 +95,13 @@ func player_gain_score():
 		rpc_id(1,"player_gain_score",room_id,self.player_score,true)
 	else:
 		rpc_id(1,"player_gain_score",room_id,self.player_score,false)
-	
+
+remote func opponent_lose_score():
+	print(opponent_name + "losed score!")
+	self.opponent_score -= 1
+	if self.opponent_score < 0 :
+		self.opponent_score = 0
+
 remote func opponent_gain_score():
 	print(opponent_name + "gained score!")
 	self.opponent_score += 1
@@ -106,9 +112,16 @@ remote func time_tick(time_left):
 remote func spawn_enemy(word,spawn_index):
 	Global.emit_signal("spawn_enemy",word,spawn_index)
 	
-func game_end_hit_bottom():
-	soft_reset()
-	rpc_id(1,"match_over",room_id,is_singlePlayer)
+func deduct_score_hit_bottom():
+	self.player_score -= 1
+	if player_score < 0 :
+		self.player_score = 0
+	if is_singlePlayer:
+		rpc_id(1,"deduct_score",room_id,self.player_score,true)
+	else:
+		rpc_id(1,"deduct_score",room_id,self.player_score,false)
+	#soft_reset()
+	#rpc_id(1,"match_over",room_id,is_singlePlayer)
 #--------------------------------------------------------------------
 remote func update_room_id(room_id):
 	self.room_id = room_id
