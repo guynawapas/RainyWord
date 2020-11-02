@@ -206,10 +206,12 @@ remote func player_conceded(is_singlePlayer):
 	var rpc_player_id = get_tree().get_rpc_sender_id()
 	if is_singlePlayer:
 		var node_player = single_player.get_node(str(rpc_player_id))
-		node_player.get_parent().remove_child(node_player)
-		players.add_child(node_player)
-		single_player_room.get_node(str(node_player.room_id)).queue_free()
-		node_player.hard_reset()
+		var player_room = rooms.get_node(str(node_player.room_id))
+		player_room.stop_all_timers()
+#		node_player.get_parent().remove_child(node_player)
+#		players.add_child(node_player)
+#		single_player_room.get_node(str(node_player.room_id)).queue_free()
+#		node_player.hard_reset()
 	else:
 		var node_player = playing.get_node(str(rpc_player_id))
 		var player_room = rooms.get_node(str(node_player.room_id))
