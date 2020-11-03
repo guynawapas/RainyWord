@@ -10,7 +10,8 @@ extends Node
 #const PORT = 4242
 #const IP_ADDRESS = "127.0.0.1"
 #var player_name=""
-
+func _ready():
+	get_node("disconnectButton").hide()
 
 func _process(delta):
 	if(get_node("nameBox").get_text()!=""):

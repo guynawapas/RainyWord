@@ -129,7 +129,19 @@ func match_time_tick(room_id,is_single_player,time_left):
 			rpc_id(player.id,"time_tick",time_left)
 	else:
 		for player in rooms.get_node(str(room_id)).connected_players:
-			rpc_id(player.id,"time_tick",time_left)
+			if not player.is_game_over:
+				rpc_id(player.id,"time_tick",time_left)
+
+func increase_difficulty(room_id,is_single_player,difficulty):
+	if is_single_player:
+		for player in single_player_room.get_node(str(room_id)).connected_players:
+			rpc_id(player.id,"difficulty_increased",difficulty)
+	else:
+		for player in rooms.get_node(str(room_id)).connected_players:
+			if not player.is_game_over:
+				rpc_id(player.id,"difficulty_increased",difficulty)
+	
+
 
 func spawn_enemy(room_id,is_single_player,spawn_index):
 	var word = WordLists.get_word()
@@ -138,12 +150,12 @@ func spawn_enemy(room_id,is_single_player,spawn_index):
 			rpc_id(player.id,"spawn_enemy",word,spawn_index)
 	else:
 		for player in rooms.get_node(str(room_id)).connected_players:
-			rpc_id(player.id,"spawn_enemy",word,spawn_index)
+			if not player.is_game_over:
+				rpc_id(player.id,"spawn_enemy",word,spawn_index)
 
 
 
-#time runs out or word hit bottom of screen
-remote func match_over(room_id,is_single_player):
+#time runs out oremote func match_over(room_id,is_single_player):
 	var called_room
 	if is_single_player:
 		called_room = single_player_room.get_node(str(room_id))
@@ -157,12 +169,18 @@ remote func match_over(room_id,is_single_player):
 		called_room.stop_all_timers()
 		for node_player in called_room.connected_players:
 			rpc_id(node_player.id,"game_end",text)
+			rpc_id(player.connected_player.id,"can_rematch")
+			rpc_id(player.id,"can_rematch")
 			node_player.soft_reset()
 		
 func check_winner(room):
 	print("checking winner")
 	var player1 = room.connected_players[0]
+	if player1 == null:
+		player1 = -1
 	var player2 = room.connected_players[1]
+	if player2 == null:
+		player2 = -1
 	var text = ""
 	if player1.player_score > player2.player_score:
 		text = player1.player_name + " wins!"
@@ -185,28 +203,38 @@ remote func player_gain_score(room_id,score,is_single_player):
 			else:
 				player.player_score += 1
 				
-remote func deduct_score(room_id,score,is_single_player):
+remote func deduct_life(room_id,life,is_single_player):
 	if is_single_player:
 		var node_player = single_player.get_node(str(get_tree().get_rpc_sender_id()))
-		node_player.player_score -= 1
-		if node_player.player_score < 0:
-			node_player.player_score = 0
+		node_player.life -= 1
+		if node_player.life <= 0:
+			rpc_id(node_player.id,"game_end","Out of lives!")
+			var player_room = single_player_room.get_node(str(room_id))
+			player_room.stop_all_timers()
 	else:
 		var player_room = rooms.get_node(str(room_id))
 		for player in player_room.connected_players:
-			if player.id != get_tree().get_rpc_sender_id():
-				rpc_id(player.id,"opponent_lose_score")
-			else:
-				player.player_score -= 1
-				if player.player_score < 0:
-					player.player_score = 0
-	
+			if player.id == get_tree().get_rpc_sender_id():
+				player.life -= 1
+				if player.life <= 0:
+					if not player_room.one_player_out_of_lives:
+						player.is_game_over = true
+						player_room.one_player_out_of_lives = true
+						rpc_id(player.id,"game_end","Out of lives!")
+						
+					else:
+						rpc_id(player.id,"game_end",check_winner(player_room))
+						rpc_id(player.connected_player.id,"can_rematch")
+						rpc_id(player.id,"can_rematch")
+						player_room.stop_all_timers()
+						
+						
 
 remote func player_conceded(is_singlePlayer):
 	var rpc_player_id = get_tree().get_rpc_sender_id()
 	if is_singlePlayer:
 		var node_player = single_player.get_node(str(rpc_player_id))
-		var player_room = rooms.get_node(str(node_player.room_id))
+		var player_room = single_player_room.get_node(str(node_player.room_id))
 		player_room.stop_all_timers()
 #		node_player.get_parent().remove_child(node_player)
 #		players.add_child(node_player)
@@ -216,10 +244,13 @@ remote func player_conceded(is_singlePlayer):
 		var node_player = playing.get_node(str(rpc_player_id))
 		var player_room = rooms.get_node(str(node_player.room_id))
 		player_room.stop_all_timers()
+		node_player.is_game_over = true
 		for player in player_room.connected_players:
 			if player.id != rpc_player_id:
 				var text = node_player.connected_player.player_name + " conceded!"
 				rpc_id(player.id,"game_end",text)
+				rpc_id(player.connected_player.id,"can_rematch")
+				rpc_id(player.id,"can_rematch")
 				print("send game end to %s"%player.player_name)
 				
 remote func single_player_return_to_menu():
@@ -235,26 +266,34 @@ remote func player_return_to_menu():
 	var node_player = playing.get_node(str(rpc_player_id))
 	var connected_player = node_player.connected_player
 	
-	var player_room_id = node_player.room_id
+	var player_room = rooms.get_node(str(node_player.room_id))
 	
-	rooms.get_node(str(player_room_id)).queue_free()
+	if node_player.is_game_over and not node_player.opponent_just_left:
+		connected_player.opponent_just_left = true
+		node_player.hard_reset()
+		node_player.get_parent().remove_child(node_player)
+		players.add_child(node_player)
+		if connected_player.is_game_over:
+			connected_player.hard_reset()
+			connected_player.get_parent().remove_child(connected_player)
+			players.add_child(connected_player)
+			player_room.queue_free()
+			rpc_id(connected_player.id,"opponent_return_to_menu")
+	else:
+		node_player.hard_reset()
+		node_player.get_parent().remove_child(node_player)
+		players.add_child(node_player)
+		player_room.queue_free()
+		print("room freed from outer else")
 	#reset player states
-	node_player.hard_reset()
-	node_player.get_parent().remove_child(node_player)
-	players.add_child(node_player)
-	connected_player.hard_reset()
-	connected_player.get_parent().remove_child(connected_player)
-	players.add_child(connected_player)
-	rpc_id(connected_player.id,"opponent_return_to_menu")
+	
+	
+	
 	
 
 remote func rematch_server(room_id):
-	print("dfghtfhjyj")
 	var called_room = rooms.get_node(str(room_id))
-	called_room.match_timer.start()
-	called_room.diff_timer.start()
-	called_room.spawn_timer.start()
-	called_room.time_left=50
+	called_room.reset()
 	
 remote func tell_opponent_rematch(room_id):
 	var player_room = rooms.get_node(str(room_id))
@@ -264,10 +303,7 @@ remote func tell_opponent_rematch(room_id):
 
 
 
-remote func reset_game_room(caller_room_id):
-	var players_in_room = rooms.get_node(caller_room_id)
-	for player in players:
-		print("reset!",player.name)
+
 	
 	
 	

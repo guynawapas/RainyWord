@@ -13,6 +13,9 @@ var room_id  = -1
 var win_lose_status = ""
 var opponent_just_left = false
 var time_left = 300
+var difficulty = 0
+var life = 5
+var can_rematch = false
 
 func set_player_name(name):
 	self.player_name = name
@@ -109,22 +112,31 @@ remote func opponent_gain_score():
 remote func time_tick(time_left):
 	self.time_left = time_left
 
+remote func difficulty_increased(new_difficulty):
+	print("current difficulty: ",new_difficulty)
+	self.difficulty = new_difficulty
+	Global.emit_signal("difficulty_increased",new_difficulty)
+
 remote func spawn_enemy(word,spawn_index):
 	Global.emit_signal("spawn_enemy",word,spawn_index)
 	
-func deduct_score_hit_bottom():
-	self.player_score -= 1
-	if player_score < 0 :
-		self.player_score = 0
+func deduct_life_hit_bottom():
+	self.life -= 1
+	if self.life <= 0 :
+		self.life = 0
 	if is_singlePlayer:
-		rpc_id(1,"deduct_score",room_id,self.player_score,true)
+		rpc_id(1,"deduct_life",room_id,self.life,true)
 	else:
-		rpc_id(1,"deduct_score",room_id,self.player_score,false)
+		rpc_id(1,"deduct_life",room_id,self.life,false)
 	#soft_reset()
 	#rpc_id(1,"match_over",room_id,is_singlePlayer)
 #--------------------------------------------------------------------
 remote func update_room_id(room_id):
 	self.room_id = room_id
+
+remote func can_rematch():
+	print("received rematch true")
+	self.can_rematch = true
 
 func rematch():
 	soft_reset()
@@ -142,11 +154,11 @@ remote func soft_reset():
 	opponent_score = 0
 	time_left = 300
 	opponent_just_left = false
+	difficulty = 0
+	life = 5
+	can_rematch = false
 
 remote func hard_reset():
 	opponent_name= ""
 	is_singlePlayer = false
-	player_score = 0
-	opponent_score = 0
-	time_left = 300
-	opponent_just_left = false
+	soft_reset()

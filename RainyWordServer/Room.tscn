@@ -14,6 +14,7 @@ autostart = true
 
 [node name="DifficultyTimer" type="Timer" parent="."]
 wait_time = 10.0
+autostart = true
 [connection signal="timeout" from="MatchTimer" to="." method="_on_MatchTimer_timeout"]
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_SpawnTimer_timeout"]
 [connection signal="timeout" from="DifficultyTimer" to="." method="_on_DifficultyTimer_timeout"]

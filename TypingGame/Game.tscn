@@ -180,8 +180,32 @@ margin_bottom = 25.0
 custom_fonts/font = SubResource( 3 )
 text = "0"
 
-[node name="filler" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+[node name="LifeRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_top = 145.0
+margin_right = 290.0
+margin_bottom = 145.0
+
+[node name="LifeContainer" type="Node" parent="MatchInformation/VBoxContainer/LifeRow"]
+
+[node name="lifePos" type="Node" parent="MatchInformation/VBoxContainer/LifeRow"]
+
+[node name="Position2D" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
+position = Vector2( 30, 194 )
+
+[node name="Position2D2" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
+position = Vector2( 60, 194 )
+
+[node name="Position2D3" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
+position = Vector2( 90, 194 )
+
+[node name="Position2D4" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
+position = Vector2( 120, 194 )
+
+[node name="Position2D5" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
+position = Vector2( 150, 194 )
+
+[node name="filler" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 149.0
 margin_right = 290.0
 margin_bottom = 507.0
 size_flags_vertical = 3
@@ -194,6 +218,7 @@ margin_bottom = 546.0
 [node name="concedeButton" type="Button" parent="MatchInformation/VBoxContainer/ConcedeRow"]
 margin_right = 153.0
 margin_bottom = 35.0
+mouse_default_cursor_shape = 2
 custom_fonts/font = SubResource( 4 )
 text = "Concede"
 
@@ -260,6 +285,7 @@ margin_bottom = 24.0
 [node name="MainMenu" type="Button" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer"]
 margin_right = 68.0
 margin_bottom = 24.0
+mouse_default_cursor_shape = 2
 custom_fonts/font = SubResource( 6 )
 text = "Menu"
 
@@ -267,6 +293,7 @@ text = "Menu"
 margin_left = 72.0
 margin_right = 177.0
 margin_bottom = 24.0
+mouse_default_cursor_shape = 2
 custom_fonts/font = SubResource( 7 )
 text = "Rematch"
 
@@ -314,6 +341,7 @@ text = "Opponent Left . . ."
 margin_top = 31.0
 margin_right = 266.0
 margin_bottom = 63.0
+mouse_default_cursor_shape = 2
 custom_fonts/font = SubResource( 9 )
 text = "Ok"
 [connection signal="body_entered" from="DeathArea" to="." method="_on_DeathArea_body_entered"]

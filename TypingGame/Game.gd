@@ -1,6 +1,7 @@
 extends Node
 
 var Enemy = preload("res://Enemy.tscn")
+var Life = preload("res://Life.tscn")
 
 onready var enemy_container = $EnemyContainer
 onready var spawn_container = $SpawnContainer
@@ -15,6 +16,10 @@ onready var win_lose_status = $gameOverScreen/PanelContainer/VBoxContainer/Cente
 onready var opponent_left_screen = $OpponentLeftScreen/opponentLeftScreen
 onready var time_value = $MatchInformation/VBoxContainer/TimerRow/TimeValue
 onready var rematch_button = $gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/Rematch
+onready var life_container = $MatchInformation/VBoxContainer/LifeRow/LifeContainer
+onready var life_pos = $MatchInformation/VBoxContainer/LifeRow/lifePos
+
+
 
 var current_letter_index=-1
 
@@ -28,11 +33,14 @@ func _ready():
 	Global.connect("game_end",self,"handle_game_end")
 	Global.connect("opponent_return_to_menu",self,"handle_opponent_return_to_menu")
 	Global.connect("spawn_enemy",self,"handle_spawn_enemy")
+	
 	if Lobby.is_singlePlayer:
 		print("single Player Game")
 		enemy_Name_Label.hide()
 		enemy_Score_Value.hide()
 		rematch_button.hide()
+	else:
+		rematch_button.disabled = true
 	start_game()
 	
 	
@@ -67,7 +75,7 @@ func _unhandled_input(event:InputEvent)->void:
 				print("successfully types %s"%key_typed)
 				current_letter_index += 1
 				active_enemy.set_next_character(current_letter_index)
-				#####also need to implement when enemy got score and erease word on our scene######
+				
 				if current_letter_index == prompt.length():
 					print("done")
 					word_killed()#add kill score
@@ -84,42 +92,34 @@ func word_killed():
 
 
 	
-func deduct_score():
-	Lobby.deduct_score_hit_bottom()
-	player_score_value.text = str(Lobby.player_score)
+func deduct_life():
+	Lobby.deduct_life_hit_bottom()
+	var life_con = life_container.get_children()
+	for i in range (life_con.size()-1,-1,-1):
+		life_con[i].queue_free()
+		return
+	
+		
 	
 	
-#probably will have to move to server
-#func _on_SpawnTimer_timeout():
-#	spawn_enemy()
-#
 
-	
-	
-#func spawn_enemy():
-#	#print("spawnEnemy")
-#	var enemy_instance = Enemy.instance()
-#	var spawns = spawn_container.get_children()
-#	#index will need to be from server
-#	var index = randi()%spawns.size()
-#	enemy_instance.position = spawns[index].global_position
-#	enemy_container.add_child(enemy_instance)
-#	enemy_instance.set_difficulty(difficulty)
 
 #will be implement on server
 func _on_DifficultyTimer_timeout():
-	difficulty += 1
-	Global.emit_signal("difficulty_increased",difficulty)
-	#print("difficulty increased to %d"%difficulty)
-	var new_wait_time = spawn_timer.wait_time - 0.2
-	spawn_timer.wait_time = clamp(new_wait_time,1,spawn_timer.wait_time)
-	#timer won't be faster than 1 second
-	difficulty_value.text = str(difficulty)
+#	difficulty += 1
+#	Global.emit_signal("difficulty_increased",difficulty)
+#	#print("difficulty increased to %d"%difficulty)
+#	var new_wait_time = spawn_timer.wait_time - 0.2
+#	spawn_timer.wait_time = clamp(new_wait_time,1,spawn_timer.wait_time)
+#	#timer won't be faster than 1 second
+#	difficulty_value.text = str(difficulty)
+	pass
 
 
 func _on_DeathArea_body_entered(body):
 	body.queue_free()
-	deduct_score()
+	deduct_life()
+	
 	
 func _on_concedeButton_pressed(): #timer in server should also stop
 	win_lose_status.text = "Conceded..."
@@ -135,6 +135,7 @@ func handle_game_end():
 func handle_spawn_enemy(word,spawn_index):
 	var enemy_instance = Enemy.instance()
 	var spawns = spawn_container.get_children()
+	enemy_instance.set_difficulty(Lobby.difficulty)
 	enemy_instance.position = spawns[spawn_index].global_position
 	enemy_container.add_child(enemy_instance)
 	enemy_instance.set_word(word)
@@ -174,14 +175,22 @@ func start_game():
 	else:
 		player_Name_Label.text = Lobby.player_name + " (You): "
 		enemy_Name_Label.text = Lobby.opponent_name + ": "
-	#spawn_timer.start()
+	
 	time_value.text = "300"
-	#spawn_enemy()
+	difficulty_value.text = "0"
+	for life in life_container.get_children():
+		life.queue_free()
+	for i in range(5):
+		var new_life = Life.instance()
+		var pos = life_pos.get_children()
+		life_container.add_child(new_life)
+		new_life.global_position = pos[i].global_position
 	
 func _process(delta):
 	time_value.text = str(Lobby.time_left)
 	enemy_Score_Value.text = str(Lobby.opponent_score)
-
-
+	difficulty_value.text = str(Lobby.difficulty)
+	if Lobby.can_rematch:
+		rematch_button.disabled = false
 
 

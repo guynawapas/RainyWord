@@ -15,7 +15,7 @@ func _physics_process(delta):
 #	get_node("Sprite").global_position.y += speed
 #	get_node("RichTextLabel").rect_global_position.y += speed
 
-#text will be handle on server
+#get text will be handle on server
 func _ready():
 	
 #	prompt_text = WordList.get_word()
@@ -34,7 +34,7 @@ func set_difficulty(difficulty):
 	handle_difficulty_increased(difficulty)
 	
 func handle_difficulty_increased(new_difficulty):
-	var new_speed = speed + (0.5*new_difficulty)
+	var new_speed = speed + (6.6*new_difficulty)
 	speed = clamp(new_speed, speed, 300)
 ####################################
 #blue = typed letter
