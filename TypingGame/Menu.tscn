@@ -150,6 +150,7 @@ __meta__ = {
 [node name="CanvasLayer2" type="CanvasLayer" parent="."]
 
 [node name="ChangeNameScreen" type="PanelContainer" parent="CanvasLayer2"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -32.0
@@ -188,7 +189,7 @@ custom_fonts/font = SubResource( 5 )
 
 [node name="okButton" type="Button" parent="CanvasLayer2/ChangeNameScreen/CenterContainer/VBoxContainer"]
 margin_left = 194.0
-margin_top = 42.0
+margin_top = 34.0
 margin_right = 306.0
 margin_bottom = 67.0
 size_flags_horizontal = 4
@@ -196,4 +197,6 @@ custom_fonts/font = SubResource( 6 )
 text = "     Ok     "
 [connection signal="pressed" from="FindMatch" to="." method="_on_FindMatch_pressed"]
 [connection signal="pressed" from="SinglePlayer" to="." method="_on_SinglePlayer_pressed"]
+[connection signal="pressed" from="ChangeName" to="." method="_on_ChangeName_pressed"]
 [connection signal="pressed" from="CanvasLayer/SearchingForPlayerScreen/CenterContainer/VBoxContainer/backButton" to="." method="_on_backButton_pressed"]
+[connection signal="pressed" from="CanvasLayer2/ChangeNameScreen/CenterContainer/VBoxContainer/okButton" to="." method="_on_okButton_pressed"]

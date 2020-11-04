@@ -80,20 +80,28 @@ remote func got_opponent(opponent_name,room_id):
 	get_tree().change_scene("res://Game.tscn")
 	
 remote func game_end(status):
-	soft_reset()
+	
 	print("received game end")
 	win_lose_status = status
 	Global.emit_signal("game_end")
 
 remote func opponent_return_to_menu():
+	soft_reset()
 	opponent_just_left = true
 	Global.emit_signal("opponent_return_to_menu")
-	
+
 #------------------------------------------------------------------
 #game logic
 #------------------------------------------------------------------
 func player_gain_score():
 	self.player_score += 1
+	if is_singlePlayer:
+		rpc_id(1,"player_gain_score",room_id,self.player_score,true)
+	else:
+		rpc_id(1,"player_gain_score",room_id,self.player_score,false)
+
+func player_gain_special_score():
+	self.player_score += 5
 	if is_singlePlayer:
 		rpc_id(1,"player_gain_score",room_id,self.player_score,true)
 	else:
@@ -117,8 +125,8 @@ remote func difficulty_increased(new_difficulty):
 	self.difficulty = new_difficulty
 	Global.emit_signal("difficulty_increased",new_difficulty)
 
-remote func spawn_enemy(word,spawn_index):
-	Global.emit_signal("spawn_enemy",word,spawn_index)
+remote func spawn_enemy(word,spawn_index,is_special):
+	Global.emit_signal("spawn_enemy",word,spawn_index,is_special)
 	
 func deduct_life_hit_bottom():
 	self.life -= 1

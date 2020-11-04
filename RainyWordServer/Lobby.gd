@@ -36,6 +36,8 @@ func peer_disconnected(id):
 				for client_in_room in room_disconnected.connected_players:
 					if client_in_room.id != id:
 						rpc_id(client_in_room.id,"opponent_disconnected")
+						client_in_room.get_parent().remove_child(client_in_room)
+						players.add_child(client_in_room)
 					print(client_in_room.player_name)
 				room_disconnected.queue_free()
 			player.queue_free()
@@ -63,7 +65,7 @@ remote func singlePlayer():
 	new_room.connected_players = [node_player]
 	node_player.room_id = room_id
 	rpc_id(rpc_player_id,"update_room_id",room_id)
-	spawn_enemy(room_id,true,1)
+	spawn_enemy(room_id,true,1,false)
 	room_id += 1
 	
 remote func find_match():
@@ -143,19 +145,20 @@ func increase_difficulty(room_id,is_single_player,difficulty):
 	
 
 
-func spawn_enemy(room_id,is_single_player,spawn_index):
+func spawn_enemy(room_id,is_single_player,spawn_index,is_special):
 	var word = WordLists.get_word()
 	if is_single_player:
 		for player in single_player_room.get_node(str(room_id)).connected_players:
-			rpc_id(player.id,"spawn_enemy",word,spawn_index)
+			rpc_id(player.id,"spawn_enemy",word,spawn_index,is_special)
 	else:
 		for player in rooms.get_node(str(room_id)).connected_players:
 			if not player.is_game_over:
-				rpc_id(player.id,"spawn_enemy",word,spawn_index)
+				rpc_id(player.id,"spawn_enemy",word,spawn_index,is_special)
 
 
 
-#time runs out oremote func match_over(room_id,is_single_player):
+#time runs out o
+remote func match_over(room_id,is_single_player):
 	var called_room
 	if is_single_player:
 		called_room = single_player_room.get_node(str(room_id))
@@ -236,15 +239,12 @@ remote func player_conceded(is_singlePlayer):
 		var node_player = single_player.get_node(str(rpc_player_id))
 		var player_room = single_player_room.get_node(str(node_player.room_id))
 		player_room.stop_all_timers()
-#		node_player.get_parent().remove_child(node_player)
-#		players.add_child(node_player)
-#		single_player_room.get_node(str(node_player.room_id)).queue_free()
-#		node_player.hard_reset()
 	else:
 		var node_player = playing.get_node(str(rpc_player_id))
 		var player_room = rooms.get_node(str(node_player.room_id))
 		player_room.stop_all_timers()
 		node_player.is_game_over = true
+		node_player.connected_player.is_game_over = true
 		for player in player_room.connected_players:
 			if player.id != rpc_player_id:
 				var text = node_player.connected_player.player_name + " conceded!"

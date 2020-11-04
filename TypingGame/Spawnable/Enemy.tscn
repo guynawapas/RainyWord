@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://Enemy.gd" type="Script" id=2]
+[ext_resource path="res://Spawnable/Enemy.gd" type="Script" id=2]
 [ext_resource path="res://assets/Enemy.png" type="Texture" id=3]
 
 [sub_resource type="DynamicFont" id=1]
@@ -9,7 +9,7 @@ size = 20
 font_data = ExtResource( 1 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 54.3574, 43.1818 )
+extents = Vector2( 24.6812, 43.1818 )
 
 [node name="Enemy" type="KinematicBody2D"]
 script = ExtResource( 2 )
@@ -37,5 +37,5 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0.318848, 0.222076 )
+position = Vector2( -26.6812, 0.222076 )
 shape = SubResource( 2 )

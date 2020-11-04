@@ -6,6 +6,7 @@ var time_left = 300
 var difficulty = 0
 var is_single_player = false
 var one_player_out_of_lives = false
+#var spawn_count = 0
 onready var match_timer = $MatchTimer
 onready var diff_timer = $DifficultyTimer
 onready var spawn_timer = $SpawnTimer
@@ -41,6 +42,7 @@ func reset():
 	spawn_timer.start()
 	time_left = 300
 	difficulty = 0
+#	spawn_count = 0
 	one_player_out_of_lives = false
 	for player in  connected_players:
 		player.soft_reset()
@@ -49,7 +51,14 @@ func reset():
 func _on_SpawnTimer_timeout():
 	randomize()
 	var spawn_index = randi()%5
-	Lobby.spawn_enemy(id,is_single_player,spawn_index)
+#	spawn_count += 1
+	var special_chance = randi()%10
+	print(special_chance)
+	if special_chance == 4:
+		print("special enemy! %d"%time_left)
+		Lobby.spawn_enemy(id,is_single_player,spawn_index,true)
+	else:
+		Lobby.spawn_enemy(id,is_single_player,spawn_index,false)
 	
 
 
