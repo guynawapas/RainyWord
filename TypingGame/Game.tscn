@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=2]
@@ -25,6 +25,18 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 29
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 19
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 24
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=12]
+size = 21
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=7]
@@ -82,6 +94,7 @@ position = Vector2( 888.16, 0.41098 )
 [node name="gameOverScreen" type="CanvasLayer" parent="."]
 
 [node name="PanelContainer" type="PanelContainer" parent="gameOverScreen"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -7.0
@@ -275,8 +288,43 @@ position = Vector2( 150, 194 )
 [node name="filler" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_top = 149.0
 margin_right = 290.0
-margin_bottom = 507.0
+margin_bottom = 304.0
 size_flags_vertical = 3
+
+[node name="TextChatBox" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 308.0
+margin_right = 290.0
+margin_bottom = 463.0
+size_flags_vertical = 3
+
+[node name="TextChat" type="RichTextLabel" parent="MatchInformation/VBoxContainer/TextChatBox"]
+margin_right = 290.0
+margin_bottom = 155.0
+rect_min_size = Vector2( 290, 150 )
+custom_fonts/normal_font = SubResource( 13 )
+fit_content_height = true
+scroll_active = false
+scroll_following = true
+
+[node name="ChatRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 467.0
+margin_right = 290.0
+margin_bottom = 507.0
+
+[node name="ChatBox" type="TextEdit" parent="MatchInformation/VBoxContainer/ChatRow"]
+margin_right = 200.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 200, 40 )
+custom_fonts/font = SubResource( 11 )
+context_menu_enabled = false
+wrap_enabled = true
+
+[node name="SendChat" type="Button" parent="MatchInformation/VBoxContainer/ChatRow"]
+margin_left = 204.0
+margin_right = 269.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 12 )
+text = "Send"
 
 [node name="ConcedeRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_top = 511.0
@@ -340,5 +388,6 @@ text = "Ok"
 [connection signal="body_entered" from="DeathArea" to="." method="_on_DeathArea_body_entered"]
 [connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/MainMenu" to="." method="_on_MainMenu_pressed"]
 [connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/Rematch" to="." method="_on_Rematch_pressed"]
+[connection signal="pressed" from="MatchInformation/VBoxContainer/ChatRow/SendChat" to="." method="_on_SendChat_pressed"]
 [connection signal="pressed" from="MatchInformation/VBoxContainer/ConcedeRow/concedeButton" to="." method="_on_concedeButton_pressed"]
 [connection signal="pressed" from="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer/opponentLeftOkButton" to="." method="_on_opponentLeftOkButton_pressed"]

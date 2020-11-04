@@ -16,6 +16,7 @@ var time_left = 300
 var difficulty = 0
 var life = 5
 var can_rematch = false
+var chat_count = 0
 
 func set_player_name(name):
 	self.player_name = name
@@ -107,11 +108,9 @@ func player_gain_special_score():
 	else:
 		rpc_id(1,"player_gain_score",room_id,self.player_score,false)
 
-remote func opponent_lose_score():
-	print(opponent_name + "losed score!")
-	self.opponent_score -= 1
-	if self.opponent_score < 0 :
-		self.opponent_score = 0
+remote func opponent_lost():
+	Global.emit_signal("opponent_lost")
+
 
 remote func opponent_gain_score():
 	print(opponent_name + "gained score!")
@@ -138,6 +137,15 @@ func deduct_life_hit_bottom():
 		rpc_id(1,"deduct_life",room_id,self.life,false)
 	#soft_reset()
 	#rpc_id(1,"match_over",room_id,is_singlePlayer)
+	
+func on_SendChat_pressed(chatBox):
+	rpc_id(1,"sendChat",chatBox,is_singlePlayer,room_id,player_name)
+	
+remote func opponent_receive_chat(namee,text):
+	print("oppenont_receive_chat")
+	Global.emit_signal("opponent_chat",namee,text)
+	
+	
 #--------------------------------------------------------------------
 remote func update_room_id(room_id):
 	self.room_id = room_id
@@ -165,8 +173,14 @@ remote func soft_reset():
 	difficulty = 0
 	life = 5
 	can_rematch = false
+	chat_count = 0
 
 remote func hard_reset():
 	opponent_name= ""
 	is_singlePlayer = false
 	soft_reset()
+
+
+	
+
+

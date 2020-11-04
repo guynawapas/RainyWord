@@ -75,7 +75,7 @@ margin_right = 214.328
 margin_bottom = 419.309
 mouse_default_cursor_shape = 2
 custom_fonts/font = SubResource( 2 )
-text = "Single PLayer"
+text = "Single Player"
 __meta__ = {
 "_edit_use_anchors_": false
 }

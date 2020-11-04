@@ -224,6 +224,7 @@ remote func deduct_life(room_id,life,is_single_player):
 						player.is_game_over = true
 						player_room.one_player_out_of_lives = true
 						rpc_id(player.id,"game_end","Out of lives!")
+						rpc_id(player.connected_player.id,"opponent_lost")
 						
 					else:
 						rpc_id(player.id,"game_end",check_winner(player_room))
@@ -245,14 +246,35 @@ remote func player_conceded(is_singlePlayer):
 		player_room.stop_all_timers()
 		node_player.is_game_over = true
 		node_player.connected_player.is_game_over = true
-		for player in player_room.connected_players:
-			if player.id != rpc_player_id:
-				var text = node_player.connected_player.player_name + " conceded!"
-				rpc_id(player.id,"game_end",text)
-				rpc_id(player.connected_player.id,"can_rematch")
-				rpc_id(player.id,"can_rematch")
-				print("send game end to %s"%player.player_name)
+		
+		var text = node_player.player_name + " conceded!"
+		rpc_id(node_player.connected_player.id,"game_end",text)
+		rpc_id(node_player.connected_player.id,"can_rematch")
+		rpc_id(node_player.id,"can_rematch")
+
+
+
+remote func rematch_server(room_id):
+	var called_room = rooms.get_node(str(room_id))
+	called_room.reset()
+	
+remote func tell_opponent_rematch(room_id):
+	var player_room = rooms.get_node(str(room_id))
+	for player in player_room.connected_players:
+		if player.id != get_tree().get_rpc_sender_id():
+				rpc_id(player.id,"rematch_opponent")
 				
+remote func sendChat(chatBox,is_singlePlayer,room_id,player_name):
+	if is_singlePlayer:
+		pass
+	else :
+		var player_room = rooms.get_node(str(room_id))
+		for player in player_room.connected_players:
+			if player.id != get_tree().get_rpc_sender_id():
+				print("sendChat")
+				rpc_id(player.id,"opponent_receive_chat",player_name,chatBox)
+
+
 remote func single_player_return_to_menu():
 	var rpc_player_id = get_tree().get_rpc_sender_id()
 	var node_player = single_player.get_node(str(rpc_player_id))
@@ -285,21 +307,10 @@ remote func player_return_to_menu():
 		players.add_child(node_player)
 		player_room.queue_free()
 		print("room freed from outer else")
-	#reset player states
 	
 	
 	
 	
-
-remote func rematch_server(room_id):
-	var called_room = rooms.get_node(str(room_id))
-	called_room.reset()
-	
-remote func tell_opponent_rematch(room_id):
-	var player_room = rooms.get_node(str(room_id))
-	for player in player_room.connected_players:
-		if player.id != get_tree().get_rpc_sender_id():
-				rpc_id(player.id,"rematch_opponent")
 
 
 

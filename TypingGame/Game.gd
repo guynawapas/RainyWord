@@ -19,6 +19,10 @@ onready var rematch_button = $gameOverScreen/PanelContainer/VBoxContainer/Center
 onready var life_container = $MatchInformation/VBoxContainer/LifeRow/LifeContainer
 onready var life_pos = $MatchInformation/VBoxContainer/LifeRow/lifePos
 onready var concede_button = $MatchInformation/VBoxContainer/ConcedeRow/concedeButton
+onready var chatBox = $MatchInformation/VBoxContainer/ChatRow/ChatBox
+onready var textChat = $MatchInformation/VBoxContainer/TextChatBox/TextChat
+onready var send_chat_button = $MatchInformation/VBoxContainer/ChatRow/SendChat
+
 
 
 var current_letter_index=-1
@@ -27,12 +31,13 @@ var active_enemy =null
 var difficulty = 0
 
 
-
 #all timer will be implement on server
 func _ready():
 	Global.connect("game_end",self,"handle_game_end")
 	Global.connect("opponent_return_to_menu",self,"handle_opponent_return_to_menu")
 	Global.connect("spawn_enemy",self,"handle_spawn_enemy")
+	Global.connect("opponent_chat",self,"opponent_receive_chat") 
+	Global.connect("opponent_lost",self,"handle_opponent_lost")
 	
 	if Lobby.is_singlePlayer:
 		print("single Player Game")
@@ -42,6 +47,7 @@ func _ready():
 	else:
 		rematch_button.disabled = true
 	start_game()
+	
 	
 	
 
@@ -107,8 +113,12 @@ func deduct_life():
 	for i in range (life_con.size()-1,-1,-1):
 		life_con[i].queue_free()
 		return
-	
 		
+func remove_all_enemy():
+	concede_button.hide()
+	for enemy in enemy_container.get_children():
+		enemy.queue_free()
+
 
 func _on_DeathArea_body_entered(body):
 	if not body.is_special:
@@ -116,16 +126,22 @@ func _on_DeathArea_body_entered(body):
 	body.queue_free()
 	
 	
-	
 func _on_concedeButton_pressed(): #timer in server should also stop
 	win_lose_status.text = "Conceded..."
 	game_over_screen.show()
 	Lobby.on_concedeButton_pressed()
+	if not Lobby.is_singlePlayer:
+		textChat.show()
+		chatBox.show()
+		send_chat_button.show()
 	remove_all_enemy()
 	
 func handle_game_end():
 	win_lose_status.text = Lobby.win_lose_status
 	game_over_screen.show()
+	textChat.show()
+	chatBox.show()
+	send_chat_button.show()
 	remove_all_enemy()
 	
 func handle_spawn_enemy(word,spawn_index,is_special):
@@ -141,7 +157,11 @@ func handle_spawn_enemy(word,spawn_index,is_special):
 	enemy_instance.set_word(word)
 	enemy_instance.set_difficulty(difficulty)
 	print("enemy word: %s at index %d"%[word,spawn_index])
-	
+
+func handle_opponent_lost():
+	concede_button.disabled = true
+
+
 func _on_MainMenu_pressed():
 	if Lobby.opponent_just_left:
 		get_tree().change_scene("res://Menu.tscn")
@@ -158,10 +178,7 @@ func _on_opponentLeftOkButton_pressed():
 	get_tree().change_scene("res://Menu.tscn")
 	
 	
-func remove_all_enemy():
-	concede_button.hide()
-	for enemy in enemy_container.get_children():
-		enemy.queue_free()
+
 
 func _on_Rematch_pressed():
 	Lobby.rematch()
@@ -169,6 +186,10 @@ func _on_Rematch_pressed():
 func start_game():
 	game_over_screen.hide()
 	opponent_left_screen.hide()
+	textChat.hide()
+	chatBox.hide()
+	send_chat_button.hide()
+	textChat.text = " "
 	randomize()
 	if Lobby.is_singlePlayer:
 		player_Name_Label.text = "Your Score: "
@@ -185,12 +206,33 @@ func start_game():
 		var pos = life_pos.get_children()
 		life_container.add_child(new_life)
 		new_life.global_position = pos[i].global_position
-	
+
+
+func _on_SendChat_pressed():
+	Lobby.chat_count += 1
+	#print(chatBox.text)
+	textChat.text = trim_chat(textChat.text) + "\n %s : %s "%[Lobby.player_name ,chatBox.text]
+	Lobby.on_SendChat_pressed(textChat.text)
+	chatBox.text=""
+
+func trim_chat(chat):
+	if Lobby.chat_count >= 7:
+		var start_index = chat.find("\n") + 1
+		chat = chat.substr(start_index)
+		return chat
+	else:
+		return chat
+
+
+func opponent_receive_chat(namee,text):
+	Lobby.chat_count += 1
+	textChat.text = text
+	print(text)
+	#print("opponent")
+
 func _process(delta):
 	time_value.text = str(Lobby.time_left)
 	enemy_Score_Value.text = str(Lobby.opponent_score)
 	difficulty_value.text = str(Lobby.difficulty)
 	if Lobby.can_rematch:
 		rematch_button.disabled = false
-
-
