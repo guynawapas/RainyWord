@@ -6,9 +6,11 @@ var time_left = 300
 var difficulty = 0
 var is_single_player = false
 var one_player_out_of_lives = false
+var gamemode = ""
 onready var match_timer = $MatchTimer
 onready var diff_timer = $DifficultyTimer
 onready var spawn_timer = $SpawnTimer
+onready var delay_timer = $Delay
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -17,8 +19,17 @@ func _ready():
 func set_id(id):
 	self.id = id
 	self.name = str(id)
+	
 
-
+func set_gamemode(gamemode):
+	self.gamemode = gamemode
+	if gamemode == "Rainy":
+		print("wait time set to 0.5")
+		spawn_timer.wait_time = 0.5
+		diff_timer.stop()
+	else:
+		spawn_timer.wait_time = 2
+		
 
 
 func _on_MatchTimer_timeout():
@@ -36,7 +47,7 @@ func stop_all_timers():
 	spawn_timer.stop()
 	
 func reset():
-	match_timer.start()
+	delay_timer.start()
 	diff_timer.start()
 	spawn_timer.start()
 	time_left = 300
@@ -51,8 +62,8 @@ func _on_SpawnTimer_timeout():
 	var spawn_index = randi()%5
 	var special_chance = randi()%10
 	print(special_chance)
-	if special_chance == 4:
-		print("special enemy! %d"%time_left)
+	if special_chance == 4 and gamemode == "Normal":
+		#print("special enemy! %d"%time_left)
 		Lobby.spawn_enemy(id,is_single_player,spawn_index,true)
 	else:
 		Lobby.spawn_enemy(id,is_single_player,spawn_index,false)
@@ -64,3 +75,7 @@ func _on_DifficultyTimer_timeout():
 	Lobby.increase_difficulty(id,is_single_player,difficulty)
 	print("time out")
 	
+
+
+func _on_Delay_timeout():
+	match_timer.start()

@@ -17,6 +17,7 @@ var difficulty = 0
 var life = 5
 var can_rematch = false
 var chat_count = 0
+var gamemode = "Normal"
 
 func set_player_name(name):
 	self.player_name = name
@@ -72,7 +73,11 @@ remote func opponent_disconnected():
 
 func find_match_pressed():
 	rpc_id(1,"find_match")
-	
+
+func set_gamemode(gamemode):
+	rpc_id(1,"set_player_gamemode",gamemode)
+	self.gamemode = gamemode
+
 remote func got_opponent(opponent_name,room_id):
 #	Global.emit_signal("set_opponent_name",opponent)
 	self.opponent_name = opponent_name

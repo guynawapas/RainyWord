@@ -8,6 +8,7 @@ var player_score = 0
 var life = 5
 var is_game_over = false
 var opponent_just_left = false
+var gamemode = "Normal"
 
 func set_id(id):
 	self.id = id

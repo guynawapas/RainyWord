@@ -22,7 +22,7 @@ onready var concede_button = $MatchInformation/VBoxContainer/ConcedeRow/concedeB
 onready var chatBox = $MatchInformation/VBoxContainer/ChatRow/ChatBox
 onready var textChat = $MatchInformation/VBoxContainer/TextChatBox/TextChat
 onready var send_chat_button = $MatchInformation/VBoxContainer/ChatRow/SendChat
-
+onready var gamemode = $MatchInformation/VBoxContainer/HBoxContainer/Gamemode
 
 
 var current_letter_index=-1
@@ -121,8 +121,11 @@ func remove_all_enemy():
 
 
 func _on_DeathArea_body_entered(body):
+	#normal ememy
 	if not body.is_special:
-		deduct_life()
+		#also in normal mode
+		if Lobby.gamemode == "Normal":
+			deduct_life()
 	body.queue_free()
 	
 	
@@ -190,6 +193,7 @@ func start_game():
 	chatBox.hide()
 	send_chat_button.hide()
 	textChat.text = " "
+	gamemode.text = Lobby.gamemode
 	randomize()
 	if Lobby.is_singlePlayer:
 		player_Name_Label.text = "Your Score: "

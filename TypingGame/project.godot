@@ -15,7 +15,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Typing Game"
+config/name="FinalRainyGame"
 run/main_scene="res://FirstPage.tscn"
 config/icon="res://icon.png"
 

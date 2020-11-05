@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Menu.gd" type="Script" id=2]
@@ -29,13 +29,31 @@ font_data = ExtResource( 1 )
 size = 31
 font_data = ExtResource( 1 )
 
+[sub_resource type="DynamicFont" id=7]
+size = 23
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=9]
+size = 29
+outline_size = 3
+outline_color = Color( 0.0784314, 0.411765, 0.705882, 1 )
+extra_spacing_top = 8
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 26
+outline_size = 3
+outline_color = Color( 0.105882, 0.670588, 0.00784314, 1 )
+extra_spacing_top = 8
+font_data = ExtResource( 1 )
+
 [node name="Menu" type="Node2D"]
 script = ExtResource( 2 )
 
 [node name="background" type="TextureRect" parent="."]
-margin_left = -35.1021
+margin_left = -35.9019
 margin_top = -23.551
-margin_right = 1063.9
+margin_right = 1063.1
 margin_bottom = 657.449
 texture = ExtResource( 3 )
 expand = true
@@ -195,8 +213,75 @@ margin_bottom = 67.0
 size_flags_horizontal = 4
 custom_fonts/font = SubResource( 6 )
 text = "     Ok     "
+
+[node name="GameModeButton" type="Button" parent="."]
+margin_left = 828.444
+margin_top = 302.943
+margin_right = 1013.44
+margin_bottom = 351.943
+custom_fonts/font = SubResource( 7 )
+text = "Game Mode"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Popup" type="Popup" parent="."]
+margin_left = 818.0
+margin_top = 283.74
+margin_right = 1023.0
+margin_bottom = 434.74
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NormalMode" type="Button" parent="Popup"]
+margin_left = 11.059
+margin_top = 19.3452
+margin_right = 196.059
+margin_bottom = 68.3452
+custom_fonts/font = SubResource( 7 )
+text = "Normal Mode"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RainyMode" type="Button" parent="Popup"]
+margin_left = 11.8579
+margin_top = 81.4286
+margin_right = 196.858
+margin_bottom = 130.429
+custom_fonts/font = SubResource( 7 )
+text = "Rainy Mode"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CurrentModeValue" type="Label" parent="."]
+margin_left = 594.163
+margin_top = 118.941
+margin_right = 741.163
+margin_bottom = 153.941
+custom_fonts/font = SubResource( 9 )
+text = "Normal"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CurrentModeLabel" type="Label" parent="."]
+margin_left = 323.876
+margin_top = 121.653
+margin_right = 585.876
+margin_bottom = 162.653
+custom_fonts/font = SubResource( 8 )
+text = "Current GameMode: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="pressed" from="FindMatch" to="." method="_on_FindMatch_pressed"]
 [connection signal="pressed" from="SinglePlayer" to="." method="_on_SinglePlayer_pressed"]
 [connection signal="pressed" from="ChangeName" to="." method="_on_ChangeName_pressed"]
 [connection signal="pressed" from="CanvasLayer/SearchingForPlayerScreen/CenterContainer/VBoxContainer/backButton" to="." method="_on_backButton_pressed"]
 [connection signal="pressed" from="CanvasLayer2/ChangeNameScreen/CenterContainer/VBoxContainer/okButton" to="." method="_on_okButton_pressed"]
+[connection signal="pressed" from="GameModeButton" to="." method="_on_GameModeButton_pressed"]
+[connection signal="pressed" from="Popup/NormalMode" to="." method="_on_NormalMode_pressed"]
+[connection signal="pressed" from="Popup/RainyMode" to="." method="_on_RainyMode_pressed"]

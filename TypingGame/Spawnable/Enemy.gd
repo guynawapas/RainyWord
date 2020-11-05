@@ -13,6 +13,8 @@ var is_special = false
 
 func _physics_process(delta):
 	var direction = Vector2(0,speed)
+	if Lobby.gamemode == "Rainy":
+		direction = Vector2(0,300)
 	move_and_slide(direction)
 #	get_node("Sprite").global_position.y += speed
 #	get_node("RichTextLabel").rect_global_position.y += speed

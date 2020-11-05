@@ -5,6 +5,8 @@ onready var name_label = $nameLabel
 onready var searchingScreen = $CanvasLayer/SearchingForPlayerScreen
 onready var changeNameScreen = $CanvasLayer2/ChangeNameScreen
 onready var changeNameTextEdit = $CanvasLayer2/ChangeNameScreen/CenterContainer/VBoxContainer/changeNameTextEdit
+onready var game_mode_selection = $Popup
+onready var current_mode_value = $CurrentModeValue
 
 func _ready():
 	changeNameScreen.hide()
@@ -36,7 +38,22 @@ func _on_okButton_pressed():
 	Lobby._on_connection_success()
 	
 	
+
+func _on_NormalMode_pressed():
+	game_mode_selection.hide()
+	Lobby.set_gamemode("Normal")
 	
+	current_mode_value.text = Lobby.gamemode
+	print("Set to Normal Mode")
 
 
+func _on_RainyMode_pressed():
+	game_mode_selection.hide()
+	Lobby.set_gamemode("Rainy")
+	current_mode_value.text = Lobby.gamemode
+	print("Set to Rainy Mode")
 
+
+func _on_GameModeButton_pressed():
+	game_mode_selection.show()
+	

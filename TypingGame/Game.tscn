@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=2]
@@ -19,6 +19,14 @@ font_data = ExtResource( 2 )
 size = 21
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=13]
+size = 29
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 29
+font_data = ExtResource( 2 )
+
 [sub_resource type="DynamicFont" id=5]
 size = 29
 font_data = ExtResource( 2 )
@@ -27,27 +35,27 @@ font_data = ExtResource( 2 )
 size = 29
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=7]
 size = 19
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=8]
 size = 24
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=9]
 size = 21
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=10]
 size = 34
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=11]
 size = 31
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=12]
 size = 30
 font_data = ExtResource( 2 )
 
@@ -179,9 +187,35 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TimerRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
 margin_right = 290.0
 margin_bottom = 25.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GamemodeLabel" type="Label" parent="MatchInformation/VBoxContainer/HBoxContainer"]
+margin_right = 180.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 13 )
+text = "Gamemode: "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Gamemode" type="Label" parent="MatchInformation/VBoxContainer/HBoxContainer"]
+margin_left = 184.0
+margin_right = 184.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimerRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+margin_top = 29.0
+margin_right = 290.0
+margin_bottom = 54.0
 
 [node name="TimeLeft" type="Label" parent="MatchInformation/VBoxContainer/TimerRow"]
 margin_right = 81.0
@@ -197,9 +231,9 @@ custom_fonts/font = SubResource( 5 )
 text = "500"
 
 [node name="DifficultyRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 29.0
+margin_top = 58.0
 margin_right = 290.0
-margin_bottom = 54.0
+margin_bottom = 83.0
 
 [node name="DifficultyLabel" type="Label" parent="MatchInformation/VBoxContainer/DifficultyRow"]
 margin_right = 157.0
@@ -215,9 +249,9 @@ custom_fonts/font = SubResource( 6 )
 text = "0"
 
 [node name="ScoreRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 58.0
+margin_top = 87.0
 margin_right = 290.0
-margin_bottom = 83.0
+margin_bottom = 112.0
 
 [node name="ScoreLabel" type="Label" parent="MatchInformation/VBoxContainer/ScoreRow"]
 margin_right = 92.0
@@ -226,9 +260,9 @@ custom_fonts/font = SubResource( 6 )
 text = "Score:"
 
 [node name="PlayerScoreRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 87.0
+margin_top = 116.0
 margin_right = 290.0
-margin_bottom = 112.0
+margin_bottom = 141.0
 
 [node name="PlayerNameLabel" type="Label" parent="MatchInformation/VBoxContainer/PlayerScoreRow"]
 margin_right = 69.0
@@ -244,9 +278,9 @@ custom_fonts/font = SubResource( 6 )
 text = "0"
 
 [node name="EnemyScoreRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 116.0
+margin_top = 145.0
 margin_right = 290.0
-margin_bottom = 141.0
+margin_bottom = 170.0
 
 [node name="EnemyNameLabel" type="Label" parent="MatchInformation/VBoxContainer/EnemyScoreRow"]
 margin_right = 112.0
@@ -262,46 +296,46 @@ custom_fonts/font = SubResource( 6 )
 text = "0"
 
 [node name="LifeRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 145.0
+margin_top = 174.0
 margin_right = 290.0
-margin_bottom = 145.0
+margin_bottom = 174.0
 
 [node name="LifeContainer" type="Node" parent="MatchInformation/VBoxContainer/LifeRow"]
 
 [node name="lifePos" type="Node" parent="MatchInformation/VBoxContainer/LifeRow"]
 
 [node name="Position2D" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
-position = Vector2( 30, 194 )
+position = Vector2( 30, 217 )
 
 [node name="Position2D2" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
-position = Vector2( 60, 194 )
+position = Vector2( 60, 217 )
 
 [node name="Position2D3" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
-position = Vector2( 90, 194 )
+position = Vector2( 90, 217 )
 
 [node name="Position2D4" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
-position = Vector2( 120, 194 )
+position = Vector2( 120, 217 )
 
 [node name="Position2D5" type="Position2D" parent="MatchInformation/VBoxContainer/LifeRow/lifePos"]
-position = Vector2( 150, 194 )
+position = Vector2( 150, 217 )
 
 [node name="filler" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 149.0
+margin_top = 178.0
 margin_right = 290.0
-margin_bottom = 304.0
+margin_bottom = 309.0
 size_flags_vertical = 3
 
 [node name="TextChatBox" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 308.0
+margin_top = 313.0
 margin_right = 290.0
 margin_bottom = 463.0
 size_flags_vertical = 3
 
 [node name="TextChat" type="RichTextLabel" parent="MatchInformation/VBoxContainer/TextChatBox"]
 margin_right = 290.0
-margin_bottom = 155.0
+margin_bottom = 150.0
 rect_min_size = Vector2( 290, 150 )
-custom_fonts/normal_font = SubResource( 13 )
+custom_fonts/normal_font = SubResource( 7 )
 fit_content_height = true
 scroll_active = false
 scroll_following = true
@@ -315,7 +349,7 @@ margin_bottom = 507.0
 margin_right = 200.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 200, 40 )
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 8 )
 context_menu_enabled = false
 wrap_enabled = true
 
@@ -323,7 +357,7 @@ wrap_enabled = true
 margin_left = 204.0
 margin_right = 269.0
 margin_bottom = 40.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 9 )
 text = "Send"
 
 [node name="ConcedeRow" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
@@ -335,7 +369,7 @@ margin_bottom = 546.0
 margin_right = 153.0
 margin_bottom = 35.0
 mouse_default_cursor_shape = 2
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 10 )
 text = "Concede"
 
 [node name="OpponentLeftScreen" type="CanvasLayer" parent="."]
@@ -375,7 +409,7 @@ margin_bottom = 332.0
 [node name="opponentLeftLabel" type="Label" parent="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer"]
 margin_right = 266.0
 margin_bottom = 27.0
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 11 )
 text = "Opponent Left . . ."
 
 [node name="opponentLeftOkButton" type="Button" parent="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer"]
@@ -383,7 +417,7 @@ margin_top = 31.0
 margin_right = 266.0
 margin_bottom = 63.0
 mouse_default_cursor_shape = 2
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 12 )
 text = "Ok"
 [connection signal="body_entered" from="DeathArea" to="." method="_on_DeathArea_body_entered"]
 [connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/MainMenu" to="." method="_on_MainMenu_pressed"]
