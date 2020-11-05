@@ -166,12 +166,12 @@ func handle_opponent_lost():
 
 
 func _on_MainMenu_pressed():
-	if Lobby.opponent_just_left:
-		get_tree().change_scene("res://Menu.tscn")
-		Global.emit_signal("opponent_return_to_menu")
-		print("emitted")
-	else:
-		Lobby.on_main_menu_pressed()
+#	if Lobby.opponent_just_left:
+#		get_tree().change_scene("res://Menu.tscn")
+#		handle_opponent_return_to_menu()
+#		#print("emitted")
+#	else:
+	Lobby.on_main_menu_pressed()
 	
 func handle_opponent_return_to_menu():
 	opponent_left_screen.show()

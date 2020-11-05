@@ -2,7 +2,7 @@ extends Node
 
 
 const PORT = 4242
-const IP_ADDRESS = "127.0.0.1"
+const IP_ADDRESS = "192.168.1.40"
 
 var player_name= ""
 var opponent_name= ""
@@ -83,6 +83,7 @@ remote func got_opponent(opponent_name,room_id):
 	self.opponent_name = opponent_name
 	self.room_id = room_id
 	print("got opponent",opponent_name)
+	time_left = 300
 	get_tree().change_scene("res://Game.tscn")
 	
 remote func game_end(status):
