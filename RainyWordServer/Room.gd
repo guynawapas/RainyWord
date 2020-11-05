@@ -11,6 +11,9 @@ onready var match_timer = $MatchTimer
 onready var diff_timer = $DifficultyTimer
 onready var spawn_timer = $SpawnTimer
 onready var delay_timer = $Delay
+
+var rain_array = [0,1,2,3,4]
+var rain_index = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -24,9 +27,10 @@ func set_id(id):
 func set_gamemode(gamemode):
 	self.gamemode = gamemode
 	if gamemode == "Rainy":
-		print("wait time set to 0.5")
-		spawn_timer.wait_time = 0.5
+		print("wait time set to 0.4")
+		spawn_timer.wait_time = 0.4
 		diff_timer.stop()
+		
 	else:
 		spawn_timer.wait_time = 2
 		
@@ -61,14 +65,23 @@ func _on_SpawnTimer_timeout():
 	randomize()
 	var spawn_index = randi()%5
 	var special_chance = randi()%10
-	print(special_chance)
+	#print(special_chance)
 	if special_chance == 4 and gamemode == "Normal":
 		#print("special enemy! %d"%time_left)
 		Lobby.spawn_enemy(id,is_single_player,spawn_index,true)
+	elif gamemode == "Rainy":
+		#print(rain_array)
+		spawn_rainy(rain_array[rain_index])
+		rain_index += 1
+		if rain_index >= 5:
+			rain_array.shuffle()
+			rain_index = 0
 	else:
 		Lobby.spawn_enemy(id,is_single_player,spawn_index,false)
 	
-
+func spawn_rainy(index):
+	#print("spawn at: %d"%index)
+	Lobby.spawn_enemy(id,is_single_player,index,false)
 
 func _on_DifficultyTimer_timeout():
 	difficulty += 1
@@ -79,3 +92,6 @@ func _on_DifficultyTimer_timeout():
 
 func _on_Delay_timeout():
 	match_timer.start()
+	rain_array.shuffle()
+
+
