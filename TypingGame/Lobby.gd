@@ -186,7 +186,9 @@ remote func hard_reset():
 	is_singlePlayer = false
 	soft_reset()
 
-
-	
+remote func reset_by_server():
+	hard_reset()
+	get_tree().change_scene("res://Menu.tscn")
+	Global.emit_signal("reset_by_server")
 
 

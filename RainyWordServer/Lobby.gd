@@ -324,9 +324,31 @@ remote func player_return_to_menu():
 	
 	
 	
+func reset_everything():
 	
-
-
+	for player in matching.get_children():
+		player.get_parent().remove_child(player)
+		players.add_child(player)
+		player.hard_reset()
+		rpc_id(player.id,"reset_by_server")
+		
+	for player in single_player.get_children():
+		player.get_parent().remove_child(player)
+		players.add_child(player)
+		player.hard_reset()
+		rpc_id(player.id,"reset_by_server")
+		
+	for player in playing.get_children():
+		player.get_parent().remove_child(player)
+		players.add_child(player)
+		player.hard_reset()
+		rpc_id(player.id,"reset_by_server")
+		
+	for room in rooms.get_children():
+		room.queue_free()
+		
+	for room in single_player_room.get_children():
+		room.queue_free()
 
 
 	

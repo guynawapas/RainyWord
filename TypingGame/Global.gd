@@ -12,3 +12,5 @@ signal spawn_enemy(word)
 signal opponent_chat(namee,text)
 
 signal opponent_lost()
+
+signal reset_by_server()

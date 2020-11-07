@@ -53,10 +53,5 @@ func listAllClient():
 
 
 func _on_Restart_pressed():#disconnect all clients
-	for player in players.get_children():
-		player.queue_free()	
-	for player in matching.get_children():
-		player.queue_free()	
-	for player in rooms.get_children():
-		player.queue_free()
+	Lobby.reset_everything()
 

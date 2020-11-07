@@ -12,6 +12,7 @@ func _ready():
 	changeNameScreen.hide()
 	searchingScreen.hide()
 	name_label.text = "Welcome!  %s"%Lobby.player_name
+	Global.connect("reset_by_server",self,"handle_reset_by_server")
 
 func _on_FindMatch_pressed():
 	if finding_match:
@@ -56,4 +57,8 @@ func _on_RainyMode_pressed():
 
 func _on_GameModeButton_pressed():
 	game_mode_selection.show()
+	
+func handle_reset_by_server():
+	searchingScreen.hide()
+	changeNameScreen.hide()
 	
