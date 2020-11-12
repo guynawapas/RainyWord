@@ -24,6 +24,18 @@ config/icon="res://icon.png"
 WordList="*res://WordList.gd"
 Global="*res://Global.gd"
 Lobby="*res://Lobby.gd"
+FxStat="*res://FXStat.gd"
+ClickPlayer="*res://ClickPlayer.tscn"
+TypePlayer="*res://TypePlayer.tscn"
+KillPlayer="*res://KillPlayer.tscn"
+LostPlayer="*res://LostPlayer.tscn"
+FindPlayer="*res://FindPlayer.tscn"
+DamagePlayer="*res://DamagePlayer.tscn"
+StartPlayer="*res://StartPlayer.tscn"
+WinPlayer="*res://WinPlayer.tscn"
+SpawnPlayer="*res://SpawnPlayer.tscn"
+BgmPlayer="*res://BgmPlayerLoopStart.tscn"
+BgmStatus="*res://BgmStatus.tscn"
 
 [input]
 

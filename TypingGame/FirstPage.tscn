@@ -94,5 +94,6 @@ text = "Disconnect"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="text_changed" from="nameBox" to="." method="_on_nameBox_text_changed"]
 [connection signal="pressed" from="connectButton" to="." method="_on_connectButton_pressed"]
 [connection signal="pressed" from="disconnectButton" to="." method="_on_disconnectButton_pressed"]

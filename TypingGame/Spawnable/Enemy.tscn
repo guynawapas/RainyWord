@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Spawnable/Enemy.gd" type="Script" id=2]
-[ext_resource path="res://assets/Enemy.png" type="Texture" id=3]
+[ext_resource path="res://assets/animated char/output-onlinepngtools (5).png" type="Texture" id=3]
+[ext_resource path="res://assets/animated char/output-onlinepngtools (6).png" type="Texture" id=4]
+[ext_resource path="res://assets/animated char/output-onlinepngtools (8).png" type="Texture" id=5]
+[ext_resource path="res://assets/animated char/output-onlinepngtools (7).png" type="Texture" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -11,15 +14,16 @@ font_data = ExtResource( 1 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 24.6812, 43.1818 )
 
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
 [node name="Enemy" type="KinematicBody2D"]
 script = ExtResource( 2 )
-
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( -6.61139, -10.4071 )
-scale = Vector2( 0.147915, 0.147915 )
-texture = ExtResource( 3 )
-region_enabled = true
-region_rect = Rect2( 92.0147, 105.904, 334.563, 366.94 )
 
 [node name="word" type="RichTextLabel" parent="."]
 margin_left = -82.3024
@@ -39,3 +43,11 @@ __meta__ = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -26.6812, 0.222076 )
 shape = SubResource( 2 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.66824, -24.9452 )
+scale = Vector2( 0.650267, 0.62372 )
+frames = SubResource( 3 )
+frame = 1
+speed_scale = 2.0
+playing = true

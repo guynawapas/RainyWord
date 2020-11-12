@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/Ejected sound.wav-0e76343d5667afa8ad0d81ec8ae53a33.sample"
+
+[deps]
+
+source_file="res://assets/Ejected sound.wav"
+dest_files=[ "res://.import/Ejected sound.wav-0e76343d5667afa8ad0d81ec8ae53a33.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

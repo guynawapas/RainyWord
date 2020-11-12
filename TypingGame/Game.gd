@@ -3,7 +3,8 @@ extends Node
 var Enemy = preload("res://Spawnable/Enemy.tscn")
 var SpecialEnemy = preload("res://Spawnable/SpecialEnemy.tscn")
 var Life = preload("res://Spawnable/Life.tscn")
-
+var fxs=FxStat.fxstat
+onready var BGclock=$BGTimer
 onready var enemy_container = $EnemyContainer
 onready var spawn_container = $SpawnContainer
 onready var difficulty_value = $MatchInformation/VBoxContainer/DifficultyRow/DiffucultyValue
@@ -23,7 +24,7 @@ onready var chatBox = $MatchInformation/VBoxContainer/ChatRow/ChatBox
 onready var textChat = $MatchInformation/VBoxContainer/TextChatBox/TextChat
 onready var send_chat_button = $MatchInformation/VBoxContainer/ChatRow/SendChat
 onready var gamemode = $MatchInformation/VBoxContainer/HBoxContainer/Gamemode
-
+onready var EjectedPlayer = $ejected
 
 var current_letter_index=-1
 
@@ -38,7 +39,8 @@ func _ready():
 	Global.connect("spawn_enemy",self,"handle_spawn_enemy")
 	Global.connect("opponent_chat",self,"opponent_receive_chat") 
 	Global.connect("opponent_lost",self,"handle_opponent_lost")
-	
+	if fxs==1:
+		BgmPlayer.stop()
 	if Lobby.is_singlePlayer:
 		print("single Player Game")
 		enemy_Name_Label.hide()
@@ -66,6 +68,8 @@ func find_new_active_enemy(typed_character:String):
 func _unhandled_input(event:InputEvent)->void:
 	if event is InputEventKey and event.is_pressed():
 		var typed_event = event as InputEventKey
+		if fxs==1:
+			TypePlayer.play()
 		
 		#ignore shift key press/hold
 		if typed_event.is_action_pressed("shift"):
@@ -100,14 +104,20 @@ func _unhandled_input(event:InputEvent)->void:
 
 #value will need to be sent to server
 func word_killed():
+	if fxs==1:
+		KillPlayer.play()
 	Lobby.player_gain_score()
 	player_score_value.text = str(Lobby.player_score)
 
 func special_killed():
+	if fxs==1:
+		KillPlayer.play()
 	Lobby.player_gain_special_score()
 	player_score_value.text = str(Lobby.player_score)
 	
 func deduct_life():
+	if fxs==1:
+		DamagePlayer.play()
 	Lobby.deduct_life_hit_bottom()
 	var life_con = life_container.get_children()
 	for i in range (life_con.size()-1,-1,-1):
@@ -130,6 +140,11 @@ func _on_DeathArea_body_entered(body):
 	
 	
 func _on_concedeButton_pressed(): #timer in server should also stop
+	if fxs==1:
+		ClickPlayer.play()
+	BgmPlayer.stop()
+	BGclock.start()
+	EjectedPlayer.play()
 	win_lose_status.text = "Conceded..."
 	game_over_screen.show()
 	Lobby.on_concedeButton_pressed()
@@ -140,6 +155,10 @@ func _on_concedeButton_pressed(): #timer in server should also stop
 	remove_all_enemy()
 	
 func handle_game_end():
+	if fxs==1:
+		BgmPlayer.stop()
+		WinPlayer.play()
+		BGclock.start()
 	win_lose_status.text = Lobby.win_lose_status
 	game_over_screen.show()
 	textChat.show()
@@ -148,6 +167,8 @@ func handle_game_end():
 	remove_all_enemy()
 	
 func handle_spawn_enemy(word,spawn_index,is_special):
+	if fxs==1:
+		SpawnPlayer.play()
 	var enemy_instance
 	if is_special:
 		enemy_instance = SpecialEnemy.instance()
@@ -162,10 +183,16 @@ func handle_spawn_enemy(word,spawn_index,is_special):
 	print("enemy word: %s at index %d"%[word,spawn_index])
 
 func handle_opponent_lost():
+	if fxs==1:
+		BgmPlayer.stop()
+		WinPlayer.play()
+		BGclock.start()
 	concede_button.disabled = true
 
 
 func _on_MainMenu_pressed():
+	if fxs==1:
+		ClickPlayer.play()
 #	if Lobby.opponent_just_left:
 #		get_tree().change_scene("res://Menu.tscn")
 #		handle_opponent_return_to_menu()
@@ -184,6 +211,8 @@ func _on_opponentLeftOkButton_pressed():
 
 
 func _on_Rematch_pressed():
+	if fxs==1:
+		ClickPlayer.play()
 	Lobby.rematch()
 	
 func start_game():
@@ -213,6 +242,8 @@ func start_game():
 
 
 func _on_SendChat_pressed():
+	if fxs==1:
+		ClickPlayer.play()
 	Lobby.chat_count += 1
 	#print(chatBox.text)
 	textChat.text = trim_chat(textChat.text) + "\n %s : %s "%[Lobby.player_name ,chatBox.text]
@@ -229,6 +260,8 @@ func trim_chat(chat):
 
 
 func opponent_receive_chat(namee,text):
+	if fxs==1:
+		ClickPlayer.play()
 	Lobby.chat_count += 1
 	textChat.text = text
 	print(text)
@@ -240,3 +273,14 @@ func _process(delta):
 	difficulty_value.text = str(Lobby.difficulty)
 	if Lobby.can_rematch:
 		rematch_button.disabled = false
+
+
+func _on_BGTimer_timeout():
+	BgmPlayer.play()
+	pass # Replace with function body.
+
+
+func _on_ChatBox_text_changed():
+	if fxs==1:
+		TypePlayer.play()
+	pass # Replace with function body.
