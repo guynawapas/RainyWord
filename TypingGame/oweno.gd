@@ -6,6 +6,7 @@ onready var boy = get_node("Char")
 
 func _ready():
 	set_process(true)
+	
 
 func _process(delta):
 	if Input.is_key_pressed(KEY_RIGHT):
@@ -26,6 +27,6 @@ func _process(delta):
 	else:
 		vel = Vector2(0, 0)
 		boy.playing=false
-		boy.set_frame(0)
+		boy.set_frame(2)
 
 	move_and_slide(vel,Vector2(0,-1))

@@ -1,9 +1,11 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/background.jpg" type="Texture" id=3]
 [ext_resource path="res://assets/Ejected sound.wav" type="AudioStream" id=4]
+[ext_resource path="res://assets/All the death animations in Among us (online-video-cutter.com).ogv" type="VideoStream" id=5]
+[ext_resource path="res://assets/Defeatn.jpg" type="Texture" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 511.747, 18.6757 )
@@ -106,10 +108,10 @@ __meta__ = {
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -7.0
-margin_top = -5.0
-margin_right = 8.0
-margin_bottom = 11.0
+margin_left = -40.0
+margin_top = -7.0
+margin_right = 2.0
+margin_bottom = 20.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -117,10 +119,10 @@ __meta__ = {
 [node name="TextureRect" type="TextureRect" parent="gameOverScreen/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 1032.0
-margin_bottom = 609.0
+margin_right = 1059.0
+margin_bottom = 620.0
 mouse_filter = 0
-texture = ExtResource( 3 )
+texture = ExtResource( 7 )
 expand = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -128,36 +130,36 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="gameOverScreen/PanelContainer"]
 margin_left = 7.0
-margin_top = 278.0
-margin_right = 1032.0
-margin_bottom = 338.0
+margin_top = 283.0
+margin_right = 1059.0
+margin_bottom = 343.0
 size_flags_vertical = 4
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CenterContainer" type="CenterContainer" parent="gameOverScreen/PanelContainer/VBoxContainer"]
-margin_right = 1025.0
+margin_right = 1052.0
 margin_bottom = 32.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="WinLoseStatus" type="Label" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer"]
-margin_left = 419.0
-margin_right = 606.0
+margin_left = 432.0
+margin_right = 619.0
 margin_bottom = 32.0
 custom_fonts/font = SubResource( 2 )
 text = "You lose..."
 
 [node name="CenterContainer2" type="CenterContainer" parent="gameOverScreen/PanelContainer/VBoxContainer"]
 margin_top = 36.0
-margin_right = 1025.0
+margin_right = 1052.0
 margin_bottom = 60.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2"]
-margin_left = 424.0
-margin_right = 601.0
+margin_left = 437.0
+margin_right = 614.0
 margin_bottom = 24.0
 
 [node name="MainMenu" type="Button" parent="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer"]
@@ -321,20 +323,21 @@ position = Vector2( 120, 217 )
 position = Vector2( 150, 217 )
 
 [node name="filler" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
+visible = false
 margin_top = 178.0
 margin_right = 290.0
 margin_bottom = 309.0
 size_flags_vertical = 3
 
 [node name="TextChatBox" type="HBoxContainer" parent="MatchInformation/VBoxContainer"]
-margin_top = 313.0
+margin_top = 178.0
 margin_right = 290.0
 margin_bottom = 463.0
 size_flags_vertical = 3
 
 [node name="TextChat" type="RichTextLabel" parent="MatchInformation/VBoxContainer/TextChatBox"]
 margin_right = 290.0
-margin_bottom = 150.0
+margin_bottom = 285.0
 rect_min_size = Vector2( 290, 150 )
 custom_fonts/normal_font = SubResource( 9 )
 fit_content_height = true
@@ -391,7 +394,7 @@ margin_left = 7.0
 margin_top = 7.0
 margin_right = 1036.0
 margin_bottom = 609.0
-texture = ExtResource( 3 )
+texture = ExtResource( 7 )
 expand = true
 
 [node name="CenterContainer" type="CenterContainer" parent="OpponentLeftScreen/opponentLeftScreen"]
@@ -420,12 +423,37 @@ mouse_default_cursor_shape = 2
 custom_fonts/font = SubResource( 14 )
 text = "Ok"
 
+[node name="cut" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="cut"]
+visible = false
+margin_left = -11.8492
+margin_top = -10.7279
+margin_right = 1038.15
+margin_bottom = 610.272
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dead" type="VideoPlayer" parent="cut/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1043.0
+margin_bottom = 614.0
+stream = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="BGTimer" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
 
 [node name="ejected" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 4 )
+
+[node name="Cutscenetimer" type="Timer" parent="."]
+wait_time = 2.6
 [connection signal="body_entered" from="DeathArea" to="." method="_on_DeathArea_body_entered"]
 [connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/MainMenu" to="." method="_on_MainMenu_pressed"]
 [connection signal="pressed" from="gameOverScreen/PanelContainer/VBoxContainer/CenterContainer2/HBoxContainer/Rematch" to="." method="_on_Rematch_pressed"]
@@ -433,4 +461,6 @@ stream = ExtResource( 4 )
 [connection signal="pressed" from="MatchInformation/VBoxContainer/ChatRow/SendChat" to="." method="_on_SendChat_pressed"]
 [connection signal="pressed" from="MatchInformation/VBoxContainer/ConcedeRow/concedeButton" to="." method="_on_concedeButton_pressed"]
 [connection signal="pressed" from="OpponentLeftScreen/opponentLeftScreen/CenterContainer/VBoxContainer/opponentLeftOkButton" to="." method="_on_opponentLeftOkButton_pressed"]
+[connection signal="finished" from="cut/PanelContainer/Dead" to="." method="_on_Dead_finished"]
 [connection signal="timeout" from="BGTimer" to="." method="_on_BGTimer_timeout"]
+[connection signal="timeout" from="Cutscenetimer" to="." method="_on_Cutscenetimer_timeout"]

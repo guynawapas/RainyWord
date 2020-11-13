@@ -22,8 +22,8 @@ config/icon="res://icon.png"
 [autoload]
 
 WordList="*res://WordList.gd"
-Global="*res://Global.gd"
 Lobby="*res://Lobby.gd"
+Global="*res://Global.gd"
 FxStat="*res://FXStat.gd"
 ClickPlayer="*res://ClickPlayer.tscn"
 TypePlayer="*res://TypePlayer.tscn"
@@ -36,6 +36,10 @@ WinPlayer="*res://WinPlayer.tscn"
 SpawnPlayer="*res://SpawnPlayer.tscn"
 BgmPlayer="*res://BgmPlayerLoopStart.tscn"
 BgmStatus="*res://BgmStatus.tscn"
+
+[display]
+
+window/stretch/mode="viewport"
 
 [input]
 

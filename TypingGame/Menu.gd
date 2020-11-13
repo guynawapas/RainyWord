@@ -4,20 +4,22 @@ var finding_match = false
 var fxs=FxStat.fxstat
 var bgs=BgmStatus.bgmstatus
 onready var name_label = $nameLabel
+onready var name_labelm = $Node2D/KinematicBody2D/Label
 onready var searchingScreen = $CanvasLayer/SearchingForPlayerScreen
 onready var changeNameScreen = $CanvasLayer2/ChangeNameScreen
 onready var changeNameTextEdit = $CanvasLayer2/ChangeNameScreen/CenterContainer/VBoxContainer/changeNameTextEdit
 onready var game_mode_selection = $Popup
 onready var current_mode_value = $CurrentModeValue
 onready var FindCharacter = $CanvasLayer/FindChar
-
+onready var cutscene=$Cutscene/PanelContainer
+onready var sh=$Cutscene/PanelContainer/sh
 func _ready():
 	BgmPlayer.play()
 	changeNameScreen.hide()
 	searchingScreen.hide()
 	name_label.text = "Welcome!  %s"%Lobby.player_name
+	name_labelm.text=Lobby.player_name
 	Global.connect("reset_by_server",self,"handle_reset_by_server")
-
 func _on_FindMatch_pressed():
 	if fxs==1:
 		ClickPlayer.play()
@@ -31,10 +33,13 @@ func _on_FindMatch_pressed():
 	FindCharacter.show()
 
 func _on_SinglePlayer_pressed():
+	cutscene.show()
+	if fxs==0:
+		sh.volume_db=-80
+	sh.play()
 	if fxs==1:
 		ClickPlayer.play()
 	Lobby.on_singlePlayer_pressed()
-	get_tree().change_scene("res://Game.tscn")
 
 
 func _on_backButton_pressed():
@@ -86,6 +91,7 @@ func handle_reset_by_server():
 	searchingScreen.hide()
 	changeNameScreen.hide()
 	
+	
 
 
 func _on_FXoffButton_pressed():
@@ -106,5 +112,13 @@ func _on_BGMoffButton_pressed():
 		BgmPlayer.play()
 		BgmStatus.bgmstatus=1
 		
+	
+	pass # Replace with function body.
+
+
+func _on_sh_finished():
+	cutscene.hide()
+	sh.volume_db=0
+	get_tree().change_scene("res://Game.tscn")
 	
 	pass # Replace with function body.

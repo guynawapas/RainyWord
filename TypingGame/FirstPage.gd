@@ -6,7 +6,8 @@ extends Node
 #                                                                                     #
 #######################################################################################
 
-
+onready var loading=$CanvasLayer/PanelContainer
+onready var scene=$CanvasLayer/PanelContainer/VideoPlayer
 #const PORT = 4242
 #const IP_ADDRESS = "127.0.0.1"
 #var player_name=""
@@ -24,7 +25,7 @@ func _on_connectButton_pressed():
 	ClickPlayer.play()
 	Lobby.set_player_name(get_node("nameBox").get_text())
 	Lobby.on_buttonConnect_pressed()
-	pass
+
 	
 func _on_disconnectButton_pressed():
 	ClickPlayer.play()

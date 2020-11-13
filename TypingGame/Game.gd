@@ -4,6 +4,7 @@ var Enemy = preload("res://Spawnable/Enemy.tscn")
 var SpecialEnemy = preload("res://Spawnable/SpecialEnemy.tscn")
 var Life = preload("res://Spawnable/Life.tscn")
 var fxs=FxStat.fxstat
+onready var cutsceneclock=$Cutscenetimer
 onready var BGclock=$BGTimer
 onready var enemy_container = $EnemyContainer
 onready var spawn_container = $SpawnContainer
@@ -25,6 +26,8 @@ onready var textChat = $MatchInformation/VBoxContainer/TextChatBox/TextChat
 onready var send_chat_button = $MatchInformation/VBoxContainer/ChatRow/SendChat
 onready var gamemode = $MatchInformation/VBoxContainer/HBoxContainer/Gamemode
 onready var EjectedPlayer = $ejected
+onready var cutscene=$cut/PanelContainer
+onready var deadcutscene=$cut/PanelContainer/Dead
 
 var current_letter_index=-1
 
@@ -39,6 +42,7 @@ func _ready():
 	Global.connect("spawn_enemy",self,"handle_spawn_enemy")
 	Global.connect("opponent_chat",self,"opponent_receive_chat") 
 	Global.connect("opponent_lost",self,"handle_opponent_lost")
+
 	if fxs==1:
 		BgmPlayer.stop()
 	if Lobby.is_singlePlayer:
@@ -122,7 +126,14 @@ func deduct_life():
 	var life_con = life_container.get_children()
 	for i in range (life_con.size()-1,-1,-1):
 		life_con[i].queue_free()
+		print(life_con.size())
+		if life_con.size()==1:
+			if fxs==0:
+				deadcutscene.volume_db=-80
+			cutscene.show()
+			deadcutscene.play()
 		return
+	
 		
 func remove_all_enemy():
 	concede_button.hide()
@@ -144,7 +155,8 @@ func _on_concedeButton_pressed(): #timer in server should also stop
 		ClickPlayer.play()
 	BgmPlayer.stop()
 	BGclock.start()
-	EjectedPlayer.play()
+	if fxs==1:
+		EjectedPlayer.play()
 	win_lose_status.text = "Conceded..."
 	game_over_screen.show()
 	Lobby.on_concedeButton_pressed()
@@ -153,6 +165,12 @@ func _on_concedeButton_pressed(): #timer in server should also stop
 		chatBox.show()
 		send_chat_button.show()
 	remove_all_enemy()
+	if fxs==0:
+		deadcutscene.volume_db=(-80)
+	cutscene.show()
+	deadcutscene.play()
+	print(deadcutscene.get_audio_track())
+	
 	
 func handle_game_end():
 	if fxs==1:
@@ -161,9 +179,10 @@ func handle_game_end():
 		BGclock.start()
 	win_lose_status.text = Lobby.win_lose_status
 	game_over_screen.show()
-	textChat.show()
-	chatBox.show()
-	send_chat_button.show()
+	if not Lobby.is_singlePlayer:
+		textChat.show()
+		chatBox.show()
+		send_chat_button.show()
 	remove_all_enemy()
 	
 func handle_spawn_enemy(word,spawn_index,is_special):
@@ -240,7 +259,6 @@ func start_game():
 		life_container.add_child(new_life)
 		new_life.global_position = pos[i].global_position
 
-
 func _on_SendChat_pressed():
 	if fxs==1:
 		ClickPlayer.play()
@@ -284,3 +302,14 @@ func _on_ChatBox_text_changed():
 	if fxs==1:
 		TypePlayer.play()
 	pass # Replace with function body.
+
+
+func _on_Cutscenetimer_timeout():
+	pass # Replace with function body.
+
+
+func _on_Dead_finished():
+	cutscene.hide()
+	deadcutscene.volume_db=0
+	pass # Replace with function body.
+

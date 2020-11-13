@@ -2,7 +2,7 @@ extends Node
 
 
 const PORT = 4242
-const IP_ADDRESS = "127.0.0.1"
+const IP_ADDRESS = "172.20.10.3"
 
 var player_name= ""
 var opponent_name= ""

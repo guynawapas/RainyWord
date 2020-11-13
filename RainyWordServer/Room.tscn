@@ -16,6 +16,7 @@ wait_time = 10.0
 autostart = true
 
 [node name="Delay" type="Timer" parent="."]
+wait_time = 3.0
 one_shot = true
 autostart = true
 [connection signal="timeout" from="MatchTimer" to="." method="_on_MatchTimer_timeout"]

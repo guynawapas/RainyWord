@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/Aero.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://FirstPage.gd" type="Script" id=2]
 [ext_resource path="res://assets/background.jpg" type="Texture" id=3]
 [ext_resource path="res://assets/steam_AboutBanner.png" type="Texture" id=4]
+[ext_resource path="res://assets/Among Us All Animations Green _ Blue Screen - Chroma Keys (online-video-cutter.com).ogv" type="VideoStream" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 29
@@ -94,6 +95,26 @@ text = "Disconnect"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+margin_left = -4.0
+margin_top = -9.0
+margin_right = 1040.0
+margin_bottom = 614.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VideoPlayer" type="VideoPlayer" parent="CanvasLayer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1037.0
+margin_bottom = 616.0
+stream = ExtResource( 5 )
 [connection signal="text_changed" from="nameBox" to="." method="_on_nameBox_text_changed"]
 [connection signal="pressed" from="connectButton" to="." method="_on_connectButton_pressed"]
 [connection signal="pressed" from="disconnectButton" to="." method="_on_disconnectButton_pressed"]
+[connection signal="finished" from="CanvasLayer/PanelContainer/VideoPlayer" to="." method="_on_VideoPlayer_finished"]
