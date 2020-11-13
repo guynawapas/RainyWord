@@ -208,14 +208,14 @@ func check_winner(room):
 remote func player_gain_score(room_id,score,is_single_player):
 	if is_single_player:
 		var node_player = single_player.get_node(str(get_tree().get_rpc_sender_id()))
-		node_player.player_score += 1
+		node_player.player_score = score
 	else:
 		var player_room = rooms.get_node(str(room_id))
 		for player in player_room.connected_players:
 			if player.id != get_tree().get_rpc_sender_id():
-				rpc_id(player.id,"opponent_gain_score")
+				rpc_id(player.id,"opponent_gain_score",score)
 			else:
-				player.player_score += 1
+				player.player_score = score
 				
 remote func deduct_life(room_id,life,is_single_player):
 	if is_single_player:

@@ -79,6 +79,7 @@ func set_gamemode(gamemode):
 	self.gamemode = gamemode
 
 remote func got_opponent(opponent_name,room_id):
+	soft_reset()
 #	Global.emit_signal("set_opponent_name",opponent)
 	self.opponent_name = opponent_name
 	self.room_id = room_id
@@ -118,9 +119,9 @@ remote func opponent_lost():
 	Global.emit_signal("opponent_lost")
 
 
-remote func opponent_gain_score():
+remote func opponent_gain_score(new_score):
 	print(opponent_name + "gained score!")
-	self.opponent_score += 1
+	self.opponent_score = new_score
 
 remote func time_tick(time_left):
 	self.time_left = time_left
